@@ -1,9 +1,9 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import './App.css';
 import rockGlass from './images/rockGlass.svg';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
-function App() {
+export default function App() {
   return (
     <div className="meals">
       <span className="logo">TRYBE</span>
@@ -18,4 +18,4 @@ function App() {
   );
 }
 
-export default App;
+
