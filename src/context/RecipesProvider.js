@@ -1,17 +1,20 @@
-
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import RecipesContext from './RecipesContext';
 
-const INITIAL_STATE = { nome: 'Xablau', idade: 100 };
+export default function RecipesProvider({ children }) {
+  const [state, setState] = useState([]);
 
-function RecipesProvider({ children }) {
-  const [state, setState] = useState(INITIAL_STATE);
+  const obj = {
+    state,
+    setState,
+  };
 
   return (
-    <RecipesContext.Provider value={ state }>
+    <RecipesContext.Provider value={ obj }>
       {children}
     </RecipesContext.Provider>
-  )
+  );
 }
 
-export default RecipesProvider;
+RecipesProvider.propTypes = { children: PropTypes.node.isRequired };
