@@ -1,0 +1,9 @@
+.navFooter {
+  background: grey;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 18px;
+  position: fixed;
+  width: 100%;
+}
