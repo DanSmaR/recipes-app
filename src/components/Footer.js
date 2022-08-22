@@ -1,8 +1,32 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import drinkIcon from '../images/drinkIcon.svg';
+import mealIcon from '../images/mealIcon.svg';
+import './css/Footer.css';
 
 function Footer() {
   return (
-    <div>Footer</div>
+    <footer data-testid="footer" className="navFooter">
+      <Link
+        to="/drinks"
+      >
+        <img
+          src={ drinkIcon }
+          data-testid="drinks-bottom-btn"
+          alt="drink_icon"
+        />
+      </Link>
+      Footer
+      <Link
+        to="/foods"
+      >
+        <img
+          src={ mealIcon }
+          data-testid="food-bottom-btn"
+          alt="meal_icon"
+        />
+      </Link>
+    </footer>
   );
 }
 
