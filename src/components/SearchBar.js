@@ -46,30 +46,30 @@ export default function SearchBar() {
     case 'Ingredient':
       results = await fetch(ingredientURL(inputText))
         .then((response) => response.json());
+      setSearchFood(results);
       break;
     case 'Name':
       results = await fetch(nameURL(inputText))
         .then((response) => response.json());
+      setSearchFood(results);
       break;
     default:
       if (inputText.length > 1) {
-        results = [];
         global.alert('Your search must have only 1 (one) character');
         return;
       }
       results = await fetch(firstLetter(inputText))
         .then((response) => response.json());
+      setSearchFood(results);
       break;
     }
     if (results.drinks === null || results.meals === null) {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
-      results = [];
     } else if (pathname === '/drinks' && results.drinks.length === 1) {
       history.push(`/drinks/${results.drinks[0].idDrink}`);
     } else if (pathname === '/foods' && results.meals.length === 1) {
       history.push(`/foods/${results.meals[0].idMeal}`);
     }
-    setSearchFood(results);
   };
 
   return (
