@@ -38,7 +38,8 @@ export default function SearchBar() {
     }
   };
 
-  const btnClick = async () => {
+  const btnClick = async (e) => {
+    e.preventDefault(e);
     if (!inputText || !inputRadios) return;
     let results = '';
     switch (inputRadios) {
@@ -72,7 +73,7 @@ export default function SearchBar() {
   };
 
   return (
-    <form onSubmit={ (e) => preventDefault(e) }>
+    <form onSubmit={ btnClick }>
       <p>
         <label htmlFor="searchBar">
           <input
@@ -129,9 +130,8 @@ export default function SearchBar() {
 
       <p>
         <button
-          type="button"
+          type="submit"
           data-testid="exec-search-btn"
-          onClick={ btnClick }
         >
           Submit
 
