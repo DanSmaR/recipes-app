@@ -1,33 +1,35 @@
 import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
-// oi
+import PropTypes from 'prop-types';
 
-export default function FoodsCard({ food, index }) {
+export default function Card({ recipes, index }) {
   const history = useHistory();
   const { location: { pathname } } = history;
 
   function renderCard(id, img, name) {
     return (
       <li>
-        <Link data-testid={ `${index}-recipe-card` } to={ `/foods/${id}` }>
+        <Link data-testid={ `${id}-recipe-card` } to={ `/foods/${id}` }>
           <img
-            data-testid={ `${index}-card-img` }
+            data-testid={ `${id}-card-img` }
             src={ img }
             alt={ name }
           />
           <p
-            data-testid={ `${index}-card-name` }
+            data-testid={ `${id}-card-name` }
           >
             { name }
           </p>
         </Link>
-      </li>
-    );
+      </li>);
   }
   if (pathname === '/foods') {
-    const { idMeal, strMealThumb, strMeal } = food;
-    return renderCard(idMeal, strMealThumb, strMeal);
+    const { strMealThumb, strMeal } = recipes;
+    return renderCard(index, strMealThumb, strMeal);
   }
-  const { idDrink, strDrinkThumb, strDrink } = food;
-  return renderCard(idDrink, strDrinkThumb, strDrink);
+  const { strDrinkThumb, strDrink } = recipes;
+  return renderCard(index, strDrinkThumb, strDrink);
 }
+Card.propTypes = {
+  index: PropTypes.number.isRequired,
+};
