@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import Card from './Card';
 import { URLMealsArr, URLDrinksArr } from '../utils/constants';
+import RecipesContext from '../context/RecipesContext';
 
 function Recipes() {
+  const { searchFood, setSearchFood } = useContext(RecipesContext);
   const history = useHistory();
   const { location: { pathname } } = history;
-  const [recipes, setRecipes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [path, setPath] = useState('');
   const MAX_LENGTH_RECIPES = 12;
   const MAX_LENGTH_CATEGORIES = 5;
 
@@ -21,7 +23,7 @@ function Recipes() {
           results[0][typeOfRecipe].filter((_, index) => index < MAX_LENGTH_RECIPES),
           results[1][typeOfRecipe].filter((_, index) => index < MAX_LENGTH_CATEGORIES),
         ];
-        setRecipes(filteredResults[0]);
+        setSearchFood(filteredResults[0]);
         setCategories(filteredResults[1]);
       })
       .catch((err) => console.log(err.message))
@@ -31,7 +33,11 @@ function Recipes() {
   useEffect(() => {
     if (pathname === '/foods') {
       handleFetchAll('meals', URLMealsArr);
-    } else handleFetchAll('drinks', URLDrinksArr);
+      setPath('meals');
+    } else {
+      handleFetchAll('drinks', URLDrinksArr);
+      setPath('drinks');
+    }
   }, []);
 
   return (
@@ -53,13 +59,15 @@ function Recipes() {
       }
       <ul>
         {
-          !isLoading && recipes.map((recipe, index) => (
-            <Card
-              key={ recipe.idMeal || recipe.idDrink }
-              recipes={ recipe }
-              index={ index }
-            />
-          ))
+          !isLoading && (Array.isArray(searchFood) ? searchFood : searchFood[path])
+            .filter((_, index) => index < MAX_LENGTH_RECIPES)
+            .map((recipe, index) => (
+              <Card
+                key={ recipe.idMeal || recipe.idDrink }
+                recipes={ recipe }
+                index={ index }
+              />
+            ))
         }
       </ul>
 
