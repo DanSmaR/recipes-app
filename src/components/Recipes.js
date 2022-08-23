@@ -9,6 +9,7 @@ function Recipes() {
   const history = useHistory();
   const { location: { pathname } } = history;
   const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [path, setPath] = useState('');
   const MAX_LENGTH_RECIPES = 12;
@@ -18,7 +19,6 @@ function Recipes() {
     Promise.all(UrlArr.map((url) => fetch(url)))
       .then((responses) => Promise.all(responses.map((res) => res.json())))
       .then((results) => {
-        console.log(results);
         const filteredResults = [
           results[0][typeOfRecipe].filter((_, index) => index < MAX_LENGTH_RECIPES),
           results[1][typeOfRecipe].filter((_, index) => index < MAX_LENGTH_CATEGORIES),
@@ -39,17 +39,58 @@ function Recipes() {
       setPath('drinks');
     }
   }, []);
+  // https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}
+  // https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}
+
+  function handleCategoryFetch(category) {
+    if (pathname === '/foods') {
+      if (category === 'all' || category === selectedCategory) {
+        fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=')
+          .then((res) => res.json())
+          .then((res) => setSearchFood(res));
+        setSelectedCategory('all');
+
+        return;
+      }
+      fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`)
+        .then((res) => res.json())
+        .then((res) => setSearchFood(res));
+      setSelectedCategory(category);
+    } else {
+      if (category === 'all' || category === selectedCategory) {
+        fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=')
+          .then((res) => res.json())
+          .then((res) => setSearchFood(res));
+        setSelectedCategory('all');
+
+        return;
+      }
+      fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`)
+        .then((res) => res.json())
+        .then((res) => setSearchFood(res));
+      setSelectedCategory(category);
+    }
+  }
 
   return (
     <div>
       {
-        !isLoading && <button type="button">All</button>
+        !isLoading && (
+          <button
+            data-testid="All-category-filter"
+            type="button"
+            onClick={ () => handleCategoryFetch('all') }
+          >
+            All
+
+          </button>)
       }
       {
         !isLoading && categories.map((category, index) => (
           <button
             key={ index }
             type="button"
+            onClick={ () => handleCategoryFetch(category.strCategory) }
             data-testid={ `${category.strCategory}-category-filter` }
           >
             { category.strCategory }
