@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import FoodsCard from './Card';
+import Card from './Card';
 
 function Recipes() {
   const history = useHistory();
@@ -77,15 +77,18 @@ function Recipes() {
           </button>
         ))
       }
-      {
-        !isLoadingRecipes && recipes.map((recipe, index) => (
-          <FoodsCard
-            key={ recipe.idMeal || recipe.idDrink }
-            recipes={ recipe }
-            index={ index }
-          />
-        ))
-      }
+      <ul>
+        {
+          !isLoadingRecipes && recipes.map((recipe, index) => (
+            <Card
+              key={ recipe.idMeal || recipe.idDrink }
+              recipes={ recipe }
+              index={ index }
+            />
+          ))
+        }
+      </ul>
+
     </div>
   );
 }

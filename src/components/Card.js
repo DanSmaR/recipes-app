@@ -8,8 +8,8 @@ export default function Card({ recipes, index }) {
 
   function renderCard(id, img, name) {
     return (
-      <Link data-testid={ `${id}-recipe-card` } to={ `/foods/${id}` }>
-        <div>
+      <li>
+        <Link data-testid={ `${id}-recipe-card` } to={ `/foods/${id}` }>
           <img
             data-testid={ `${id}-card-img` }
             src={ img }
@@ -20,8 +20,8 @@ export default function Card({ recipes, index }) {
           >
             { name }
           </p>
-        </div>
-      </Link>);
+        </Link>
+      </li>);
   }
   if (pathname === '/foods') {
     const { strMealThumb, strMeal } = recipes;
