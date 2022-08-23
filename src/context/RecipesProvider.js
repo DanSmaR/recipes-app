@@ -4,10 +4,13 @@ import RecipesContext from './RecipesContext';
 
 export default function RecipesProvider({ children }) {
   const [state, setState] = useState([]);
+  const [searchFood, setSearchFood] = useState({ init: 0 });
 
   const obj = {
     state,
     setState,
+    setSearchFood,
+    searchFood,
   };
 
   return (

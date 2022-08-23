@@ -3,12 +3,12 @@ import userEvent from '@testing-library/user-event';
 import React from 'react';
 import Foods from '../pages/Foods';
 import renderWithRouter from './helpers/renderWithRouter';
-
+import Provider from '../context/RecipesProvider';
 
 describe('Testa o componente HEADER', () => {
   it('Renderiza todos os elementos corretamente', () => {
     
-    renderWithRouter(<Foods />);
+    renderWithRouter(<Provider><Foods /></Provider>);
 
     const profileBtn = screen.getByTestId('profile-top-btn');
     const title = screen.getByTestId('page-title');
@@ -21,7 +21,7 @@ describe('Testa o componente HEADER', () => {
 
   it('Testa o botão do PROFILE', () => {
     
-    const { history } = renderWithRouter(<Foods />);
+    const { history } = renderWithRouter(<Provider><Foods /></Provider>);
 
     const profileBtn = screen.getByTestId('profile-top-btn');
     userEvent.click(profileBtn);
@@ -37,7 +37,7 @@ describe('Testa o componente HEADER', () => {
 
   it('Testa botão de PESQUISA', () => {
     
-    renderWithRouter(<Foods />);
+    renderWithRouter(<Provider><Foods /></Provider>);
 
     const searchBtn = screen.getByTestId('search-top-btn');
     
