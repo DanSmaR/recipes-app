@@ -38,6 +38,7 @@ function Recipes() {
       handleFetchAll('drinks', URLDrinksArr);
       setPath('drinks');
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleCategoryFetch(category) {
