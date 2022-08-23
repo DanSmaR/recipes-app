@@ -76,6 +76,7 @@ export default function SearchBar() {
       <p>
         <label htmlFor="searchBar">
           <input
+            id="searchBar"
             type="text"
             placeholder="Pesquise uma comida ou bebida"
             data-testid="search-input"
