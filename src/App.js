@@ -9,6 +9,7 @@ import FavoriteRecipes from './pages/FavoriteRecipes';
 import Foods from './pages/Foods';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
+import RecipeDetails from './pages/RecipeDetails';
 
 export default function App() {
   return (
@@ -21,6 +22,16 @@ export default function App() {
           <Route exact path="/drinks" component={ Drinks } />
           <Route exact path="/done-recipes" component={ DoneRecipes } />
           <Route exact path="/favorite-recipes" component={ FavoriteRecipes } />
+          <Route
+            exact
+            path="/foods/:idRecipe"
+            render={ (props) => <RecipeDetails { ...props } /> }
+          />
+          <Route
+            exact
+            path="/drinks/:idRecipe"
+            render={ (props) => <RecipeDetails { ...props } /> }
+          />
         </Switch>
       </BrowserRouter>
     </Provider>
