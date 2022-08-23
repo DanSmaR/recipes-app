@@ -1,32 +1,49 @@
 import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-export default function FoodsCard({ food, index }) {
+export default function Card({ recipes, index }) {
   const history = useHistory();
   const { location: { pathname } } = history;
 
-  function renderCard(id, img, name) {
+  function renderCard({ recipeId, recipeIndex, img, name, path }) {
     return (
       <li>
-        <Link data-testid={ `${index}-recipe-card` } to={ `/foods/${id}` }>
+        <Link data-testid={ `${recipeIndex}-recipe-card` } to={ `/${path}/${recipeId}` }>
           <img
-            data-testid={ `${index}-card-img` }
+            style={ { width: '80%' } }
+            data-testid={ `${recipeIndex}-card-img` }
             src={ img }
             alt={ name }
           />
           <p
-            data-testid={ `${index}-card-name` }
+            data-testid={ `${recipeIndex}-card-name` }
           >
             { name }
           </p>
         </Link>
-      </li>
-    );
+      </li>);
   }
   if (pathname === '/foods') {
-    const { idMeal, strMealThumb, strMeal } = food;
-    return renderCard(idMeal, strMealThumb, strMeal);
+    const { idMeal, strMealThumb, strMeal } = recipes;
+    const foodObj = {
+      recipeId: idMeal,
+      img: strMealThumb,
+      name: strMeal,
+      recipeIndex: index,
+      path: 'foods',
+    };
+    return renderCard(foodObj);
   }
-  const { idDrink, strDrinkThumb, strDrink } = food;
-  return renderCard(idDrink, strDrinkThumb, strDrink);
+  const { idDrink, strDrinkThumb, strDrink } = recipes;
+  const drinkObj = {
+    recipeId: idDrink,
+    img: strDrinkThumb,
+    name: strDrink,
+    recipeIndex: index,
+    path: 'drinks' };
+  return renderCard(drinkObj);
 }
+Card.propTypes = {
+  index: PropTypes.number.isRequired,
+};
