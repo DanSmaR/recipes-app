@@ -19,6 +19,7 @@ function Recipes() {
     Promise.all(UrlArr.map((url) => fetch(url)))
       .then((responses) => Promise.all(responses.map((res) => res.json())))
       .then((results) => {
+        console.log(results);
         const filteredResults = [
           results[0][typeOfRecipe].filter((_, index) => index < MAX_LENGTH_RECIPES),
           results[1][typeOfRecipe].filter((_, index) => index < MAX_LENGTH_CATEGORIES),
@@ -39,8 +40,6 @@ function Recipes() {
       setPath('drinks');
     }
   }, []);
-  // https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}
-  // https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}
 
   function handleCategoryFetch(category) {
     if (pathname === '/foods') {

@@ -26,7 +26,7 @@ describe('Testa o componente FOOTER', () => {
     expect(favoriteRecipes).toBeInTheDocument()
     expect(logout).toBeInTheDocument()
     userEvent.click(logout)
-    console.log(localStorage)
+
     expect(localStorage.getItem('user')).toBeNull()
 
   });

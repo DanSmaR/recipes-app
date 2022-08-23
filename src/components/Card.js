@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 export default function Card({ recipes, index }) {
   const history = useHistory();
   const { location: { pathname } } = history;
-  console.log(recipes);
 
   function renderCard({ recipeId, recipeIndex, img, name, path }) {
     return (
