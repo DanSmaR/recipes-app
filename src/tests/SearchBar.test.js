@@ -83,6 +83,13 @@ describe('Testa o componente SEARCHBAR', () => {
     await waitFor(() => {
       expect(global.alert).toHaveBeenCalledWith('Your search must have only 1 (one) character');
     })
+
+    userEvent.clear(textInput);
+    userEvent.clear(firstRadio);
+    userEvent.click(submitBtn);
+    await waitFor(() => {
+      expect(global.fetch).not.toHaveBeenCalledTimes(4);
+    })
   });
 });
 

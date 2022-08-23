@@ -39,22 +39,27 @@ export default function SearchBar() {
   };
 
   const btnClick = async () => {
+    if (!inputText || !inputRadios) return;
     let results = '';
     switch (inputRadios) {
     case 'Ingredient':
       results = await fetch(ingredientURL(inputText))
         .then((response) => response.json());
+      setSearchFood(results);
       break;
     case 'Name':
       results = await fetch(nameURL(inputText))
         .then((response) => response.json());
+      setSearchFood(results);
       break;
     default:
       if (inputText.length > 1) {
         global.alert('Your search must have only 1 (one) character');
+        return;
       }
       results = await fetch(firstLetter(inputText))
         .then((response) => response.json());
+      setSearchFood(results);
       break;
     }
     if (results.drinks === null || results.meals === null) {
@@ -64,11 +69,10 @@ export default function SearchBar() {
     } else if (pathname === '/foods' && results.meals.length === 1) {
       history.push(`/foods/${results.meals[0].idMeal}`);
     }
-    setSearchFood(results);
   };
 
   return (
-    <form>
+    <form onSubmit={ (e) => preventDefault(e) }>
       <p>
         <label htmlFor="searchBar">
           <input
@@ -80,42 +84,47 @@ export default function SearchBar() {
           />
         </label>
       </p>
-      <p>
-        <label htmlFor="ingredientRadio">
-          <input
-            type="radio"
-            data-testid="ingredient-search-radio"
-            id="ingredientRadio"
-            name="radios"
-            value="Ingredient"
-            onChange={ handleInput }
-          />
-          Ingredient
-        </label>
-        <label htmlFor="nameRadio">
-          <input
-            type="radio"
-            data-testid="name-search-radio"
-            id="nameRadio"
-            name="radios"
-            value="Name"
-            onChange={ handleInput }
-          />
-          Name
-        </label>
-
-        <label htmlFor="firstLetterRadio">
-          <input
-            type="radio"
-            data-testid="first-letter-search-radio"
-            id="firstLetterRadio"
-            name="radios"
-            value="First letter"
-            onChange={ handleInput }
-          />
-          First letter
-        </label>
-      </p>
+      <ul>
+        <li>
+          <label htmlFor="ingredientRadio">
+            <input
+              type="radio"
+              data-testid="ingredient-search-radio"
+              id="ingredientRadio"
+              name="radios"
+              value="Ingredient"
+              onChange={ handleInput }
+            />
+            Ingredient
+          </label>
+        </li>
+        <li>
+          <label htmlFor="nameRadio">
+            <input
+              type="radio"
+              data-testid="name-search-radio"
+              id="nameRadio"
+              name="radios"
+              value="Name"
+              onChange={ handleInput }
+            />
+            Name
+          </label>
+        </li>
+        <li>
+          <label htmlFor="firstLetterRadio">
+            <input
+              type="radio"
+              data-testid="first-letter-search-radio"
+              id="firstLetterRadio"
+              name="radios"
+              value="First letter"
+              onChange={ handleInput }
+            />
+            First letter
+          </label>
+        </li>
+      </ul>
 
       <p>
         <button
