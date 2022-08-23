@@ -27,7 +27,6 @@ function Recipes() {
         setSearchFood(filteredResults[0]);
         setCategories(filteredResults[1]);
       })
-      .catch((err) => console.log(err.message))
       .finally(() => setIsLoading(false));
   }
 
