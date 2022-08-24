@@ -1,17 +1,40 @@
-import { screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import Foods from '../pages/Foods';
 import renderWithRouter from './helpers/renderWithRouter';
+import meals from '../../cypress/mocks/meals'
+import drinks from '../../cypress/mocks/drinks'
+import mealCategories from '../../cypress/mocks/mealCategories';
+import mealsByIngredient from '../../cypress/mocks/mealsByIngredient';
+import drinksByIngredient from '../../cypress/mocks/drinksByIngredient';
 import firstLetterMeal from '../../cypress/mocks/firstLetterMeal';
 import firstLetterDrinks from '../../cypress/mocks/firstLetterDrinks';
 import Provider from '../context/RecipesProvider';
 import Drinks from '../pages/Drinks';
 import fetch from '../../cypress/mocks/fetch';
+import soupMeals from '../../cypress/mocks/soupMeals';
+import oneMeal from '../../cypress/mocks/oneMeal';
+import emptyMeals from '../../cypress/mocks/emptyMeals';
+import drinkCategories from '../../cypress/mocks/drinkCategories';
+import ginDrinks from '../../cypress/mocks/ginDrinks';
+import oneDrink from '../../cypress/mocks/oneDrink';
 
 describe('Testa o componente SEARCHBAR', () => {
-  beforeEach(async() => {
-    jest.spyOn(global, 'fetch').mockImplementation(fetch);
+  beforeEach(() => {
+    jest.spyOn(global, 'fetch').mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(meals),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(mealCategories),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(mealsByIngredient),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(soupMeals),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(oneMeal),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(emptyMeals),
+    }))
     global.alert = jest.fn();
   });
 
@@ -27,7 +50,7 @@ describe('Testa o componente SEARCHBAR', () => {
       expect(global.fetch).toHaveBeenCalledWith("https://www.themealdb.com/api/json/v1/1/list.php?c=list")
       expect(global.fetch).toHaveBeenCalledTimes(2)
     });
-    
+
     const searchBtn = screen.getByRole('img', { name: /searchicon/i })
     userEvent.click(searchBtn);
     
@@ -112,7 +135,17 @@ describe('Testa o componente SEARCHBAR', () => {
 
 describe('Testa o componente SEARCHBAR', () => {
   beforeEach(() => {
-    jest.spyOn(global, 'fetch').mockImplementation(fetch);
+    jest.spyOn(global, 'fetch').mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(drinks),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(drinkCategories),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(drinksByIngredient),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(ginDrinks),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(oneDrink),
+    }));
     global.alert = jest.fn();
   });
 
@@ -177,12 +210,13 @@ describe('Testa o componente SEARCHBAR', () => {
 
 describe('Testando componente SearchBar', () => {
   beforeEach(() => {
-    jest.spyOn(global, 'fetch')
-      .mockImplementationOnce(fetch)
-      .mockImplementationOnce(fetch)
-      .mockImplementationOnce(() => Promise.resolve({
-        json: () => Promise.resolve(firstLetterMeal),
-      }));
+    jest.spyOn(global, 'fetch').mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(meals),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(mealCategories),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(firstLetterMeal),
+    }));
     global.alert = jest.fn();
   });
 
@@ -220,12 +254,13 @@ describe('Testando componente SearchBar', () => {
 
 describe('Testando componente SearchBar', () => {
   beforeEach(() => {
-    jest.spyOn(global, 'fetch')
-      .mockImplementationOnce(fetch)
-      .mockImplementationOnce(fetch)
-      .mockImplementationOnce(() => Promise.resolve({
-        json: () => Promise.resolve(firstLetterDrinks),
-      }));
+    jest.spyOn(global, 'fetch').mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(drinks),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(drinkCategories),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(firstLetterDrinks),
+    }));
     global.alert = jest.fn();
   });
 
