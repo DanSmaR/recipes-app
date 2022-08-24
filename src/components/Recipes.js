@@ -47,7 +47,6 @@ function Recipes() {
           .then((res) => res.json())
           .then((res) => setSearchFood(res));
         setSelectedCategory('all');
-
         return;
       }
       fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`)
@@ -60,7 +59,6 @@ function Recipes() {
           .then((res) => res.json())
           .then((res) => setSearchFood(res));
         setSelectedCategory('all');
-
         return;
       }
       fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`)
