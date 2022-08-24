@@ -19,7 +19,6 @@ function Recipes() {
     Promise.all(UrlArr.map((url) => fetch(url)))
       .then((responses) => Promise.all(responses.map((res) => res.json())))
       .then((results) => {
-        console.log(results);
         const filteredResults = [
           results[0][typeOfRecipe].filter((_, index) => index < MAX_LENGTH_RECIPES),
           results[1][typeOfRecipe].filter((_, index) => index < MAX_LENGTH_CATEGORIES),
@@ -48,7 +47,6 @@ function Recipes() {
           .then((res) => res.json())
           .then((res) => setSearchFood(res));
         setSelectedCategory('all');
-
         return;
       }
       fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`)
@@ -61,7 +59,6 @@ function Recipes() {
           .then((res) => res.json())
           .then((res) => setSearchFood(res));
         setSelectedCategory('all');
-
         return;
       }
       fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`)
