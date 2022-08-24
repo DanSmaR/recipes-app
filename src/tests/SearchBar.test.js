@@ -1,23 +1,13 @@
 import { screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
-import App from '../App';
 import Foods from '../pages/Foods';
 import renderWithRouter from './helpers/renderWithRouter';
-import meals from '../../cypress/mocks/meals'
-import drinks from '../../cypress/mocks/drinks'
-import mealCategories from '../../cypress/mocks/mealCategories';
-import mealsByIngredient from '../../cypress/mocks/mealsByIngredient';
-import drinksByIngredient from '../../cypress/mocks/drinksByIngredient';
 import firstLetterMeal from '../../cypress/mocks/firstLetterMeal';
 import firstLetterDrinks from '../../cypress/mocks/firstLetterDrinks';
 import Provider from '../context/RecipesProvider';
-import { corbaMeal, emptyResult } from './helpers/constants';
 import Drinks from '../pages/Drinks';
-import { act } from 'react-dom/test-utils';
 import fetch from '../../cypress/mocks/fetch';
-
-
 
 describe('Testa o componente SEARCHBAR', () => {
   beforeEach(async() => {
@@ -126,6 +116,7 @@ describe('Testa o componente SEARCHBAR', () => {
     jest.spyOn(global, 'fetch').mockImplementation(fetch);
     global.alert = jest.fn();
   });
+
   afterEach(() => {
     jest.resetAllMocks();
   });
