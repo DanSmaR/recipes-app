@@ -19,7 +19,6 @@ function Recipes() {
     Promise.all(UrlArr.map((url) => fetch(url)))
       .then((responses) => Promise.all(responses.map((res) => res.json())))
       .then((results) => {
-        console.log(results);
         const filteredResults = [
           results[0][typeOfRecipe].filter((_, index) => index < MAX_LENGTH_RECIPES),
           results[1][typeOfRecipe].filter((_, index) => index < MAX_LENGTH_CATEGORIES),
