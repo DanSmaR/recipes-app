@@ -115,6 +115,7 @@ describe('Testa o componente SEARCHBAR', () => {
     jest.spyOn(global, 'fetch').mockImplementation(fetch);
     global.alert = jest.fn();
   });
+
   afterEach(() => {
     jest.resetAllMocks();
   });
