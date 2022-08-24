@@ -5,9 +5,54 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  width: 100%;
+  padding: 0px 8px;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.navFooter {
+  background: grey;
+  bottom: 0;
+  left: 0;
+  margin-left: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 28px;
+  position: fixed;
+  width: 100%;
+}
+
+.filter-container {
+  display: flex;
+  list-style: none;
+  width: 100%;
+  padding: 0 0;
+  justify-content: space-around;
+}
+
+.filter-container li {
+  width: 30%;
+}
+
+.filterBtn {
+  width: 100%;
+}
+
+.card-recipe {
+  display: flex;
+  margin: 8px 16px;
+  align-items: center;
+
+}
+.card-recipe a {
+  height: fit-content;
+  width: fit-content;
+}
+.card-recipe a img {
+  height: 20%;
+  margin-right: 20px;
 }
