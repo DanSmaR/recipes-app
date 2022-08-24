@@ -8,11 +8,10 @@ import drinks from '../../cypress/mocks/drinks'
 import mealCategories from '../../cypress/mocks/mealCategories';
 import mealsByIngredient from '../../cypress/mocks/mealsByIngredient';
 import drinksByIngredient from '../../cypress/mocks/drinksByIngredient';
-import firstLetterMeal from '../../cypress/mocks/firstLetterMeal';
-import firstLetterDrinks from '../../cypress/mocks/firstLetterDrinks';
+import firstLetterMeal from '../utils/mocks/firstLetterMeal';
+import firstLetterDrinks from '../utils/mocks/firstLetterDrinks';
 import Provider from '../context/RecipesProvider';
 import Drinks from '../pages/Drinks';
-import fetch from '../../cypress/mocks/fetch';
 import soupMeals from '../../cypress/mocks/soupMeals';
 import oneMeal from '../../cypress/mocks/oneMeal';
 import emptyMeals from '../../cypress/mocks/emptyMeals';
