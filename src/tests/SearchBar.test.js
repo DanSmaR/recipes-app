@@ -1,83 +1,111 @@
-import { screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
-import App from '../App';
+import Foods from '../pages/Foods';
 import renderWithRouter from './helpers/renderWithRouter';
 import meals from '../../cypress/mocks/meals'
 import drinks from '../../cypress/mocks/drinks'
+import mealCategories from '../../cypress/mocks/mealCategories';
+import mealsByIngredient from '../../cypress/mocks/mealsByIngredient';
+import drinksByIngredient from '../../cypress/mocks/drinksByIngredient';
+import firstLetterMeal from '../utils/mocks/firstLetterMeal';
+import firstLetterDrinks from '../utils/mocks/firstLetterDrinks';
 import Provider from '../context/RecipesProvider';
-import { corbaMeal, emptyResult } from './helpers/constants';
 import Drinks from '../pages/Drinks';
-
-
+import soupMeals from '../../cypress/mocks/soupMeals';
+import oneMeal from '../../cypress/mocks/oneMeal';
+import emptyMeals from '../../cypress/mocks/emptyMeals';
+import drinkCategories from '../../cypress/mocks/drinkCategories';
+import ginDrinks from '../../cypress/mocks/ginDrinks';
+import oneDrink from '../../cypress/mocks/oneDrink';
 
 describe('Testa o componente SEARCHBAR', () => {
   beforeEach(() => {
-    jest.spyOn(global, 'fetch').mockImplementation(() => Promise.resolve({
+    jest.spyOn(global, 'fetch').mockImplementationOnce(() => Promise.resolve({
       json: () => Promise.resolve(meals),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(mealCategories),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(mealsByIngredient),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(soupMeals),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(oneMeal),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(emptyMeals),
     }))
     global.alert = jest.fn();
   });
+
   afterEach(() => {
     jest.resetAllMocks();
   });
 
-  it('Testa se todos os inputs estão na tela, /foods', async () => {
-    
-    const {history} = renderWithRouter(<Provider><App /></Provider>);
+  it('Testando as respostas da API ao fazer as pesquisas no campo de buscas enquanto estiver na url /foods', async () => {
+    const {history} = renderWithRouter(<Provider><Foods /></Provider>, ['/foods']);
+    expect(history.location.pathname).toBe('/foods');
+    await  waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith("https://www.themealdb.com/api/json/v1/1/search.php?s=")
+      expect(global.fetch).toHaveBeenCalledWith("https://www.themealdb.com/api/json/v1/1/list.php?c=list")
+      expect(global.fetch).toHaveBeenCalledTimes(2)
+    });
 
-    const email = screen.getByTestId('email-input');
-    const password = screen.getByTestId('password-input');
-    const button = screen.getByTestId('login-submit-btn'); 
-
-    userEvent.type(email, 'alguem@email.com');
-    userEvent.type(password, 'qwertyu');    
-    userEvent.click(button);
-
-    history.push('/foods');
-
-    const searchBtn = screen.getByTestId('search-top-btn');
-
+    const searchBtn = screen.getByRole('img', { name: /searchicon/i })
     userEvent.click(searchBtn);
-
+    
     const textInput = screen.getByTestId('search-input');
-    const ingredientRadio = screen.getByTestId('ingredient-search-radio');
-    const nameRadio = screen.getByTestId('name-search-radio');
-    const firstRadio = screen.getByTestId('first-letter-search-radio');
-    const submitBtn = screen.getByTestId('exec-search-btn');
+    const ingredientRadio = screen.getByRole('radio', { name: /ingredient/i })
+    const nameRadio = screen.getByRole('radio', { name: /name/i });
+    const firstLetterRadio = screen.getByRole('radio', { name: /first letter/i });
+    const submitBtn = screen.getByRole('button', { name: /submit/i })
 
     expect(textInput).toBeInTheDocument();
     expect(ingredientRadio).toBeInTheDocument();
     expect(nameRadio).toBeInTheDocument();
-    expect(firstRadio).toBeInTheDocument();
+    expect(firstLetterRadio).toBeInTheDocument();
     expect(submitBtn).toBeInTheDocument();
-
-    userEvent.type(textInput, 'Onion');
+    
+    userEvent.type(textInput, 'Chicken');
+    expect(textInput).toHaveValue('Chicken')
     userEvent.click(ingredientRadio);
-    userEvent.click(submitBtn);
+    expect(ingredientRadio).toBeChecked()
 
+    userEvent.click(submitBtn);
+    
     await  waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/filter.php?i=Onion')
-    })
-
-    userEvent.click(nameRadio);
-    userEvent.click(submitBtn);
-
-    await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?s=Onion')
-    })
+      expect(global.fetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/filter.php?i=Chicken')
+      expect(global.fetch).toHaveBeenCalledTimes(3)
+    })    
+    expect(screen.getByText(/brown stew chicken/i)).toBeInTheDocument();
 
     userEvent.clear(textInput);
-    userEvent.type(textInput, 'o');
-    userEvent.click(firstRadio);
+    userEvent.type(textInput, 'soup');
+    userEvent.click(nameRadio);
+    expect(nameRadio).toBeChecked()
     userEvent.click(submitBtn);
-
+    
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?f=o')
+      expect(global.fetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?s=soup')
+      expect(global.fetch).toHaveBeenCalledTimes(4)
     })
 
+    expect(screen.getByText(/Leblebi Soup/i)).toBeInTheDocument();
+
+    // Aguardando tela de uma receita ser desenvolvida
+    userEvent.clear(textInput);
+    userEvent.type(textInput, 'Arrabiata');
+    userEvent.click(nameRadio);
+    userEvent.click(submitBtn);
+    
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?s=Arrabiata')
+      expect(global.fetch).toHaveBeenCalledTimes(5)
+    })
+    expect(history.location.pathname).toBe('/foods/52771');
+    // expect(screen.getByText(/Spicy Arrabiata Penne/i)).toBeInTheDocument();
+
     userEvent.type(textInput, 'o');
-    userEvent.click(firstRadio);
+    userEvent.click(firstLetterRadio);
     userEvent.click(submitBtn);
 
     await waitFor(() => {
@@ -85,41 +113,20 @@ describe('Testa o componente SEARCHBAR', () => {
     })
 
     userEvent.clear(textInput);
-    userEvent.clear(firstRadio);
+    userEvent.clear(firstLetterRadio);
     userEvent.click(submitBtn);
+
     await waitFor(() => {
-      expect(global.fetch).not.toHaveBeenCalledTimes(4);
+      expect(global.fetch).not.toHaveBeenCalledTimes(6);
     })
-  });
-});
-
-describe('Name of the group', () => {
-  beforeEach(() => {
-    jest.spyOn(global, 'fetch').mockImplementation(() => Promise.resolve({
-      json: () => Promise.resolve(emptyResult),
-    }))
-    global.alert = jest.fn();
-  });
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
-
-  it('oi', async () => {
-    const {history} = renderWithRouter(<Provider><App /></Provider>);
-
-    const searchBtn = screen.getByTestId('search-top-btn');
-    
-    userEvent.click(searchBtn);
-    const textInput = screen.getByTestId('search-input');
-    const nameRadio = screen.getByTestId('name-search-radio');
-    const submitBtn = screen.getByTestId('exec-search-btn');
 
     userEvent.clear(textInput);
-    userEvent.type(textInput, 'Xablau');
+    userEvent.type(textInput, 'xablau');
     userEvent.click(nameRadio);
     userEvent.click(submitBtn);
 
     await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?s=xablau')
       expect(global.alert).toHaveBeenCalledWith('Sorry, we haven\'t found any recipes for these filters.');
     })
   });
@@ -127,53 +134,163 @@ describe('Name of the group', () => {
 
 describe('Testa o componente SEARCHBAR', () => {
   beforeEach(() => {
-    jest.spyOn(global, 'fetch').mockImplementation(() => Promise.resolve({
+    jest.spyOn(global, 'fetch').mockImplementationOnce(() => Promise.resolve({
       json: () => Promise.resolve(drinks),
-    }))
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(drinkCategories),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(drinksByIngredient),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(ginDrinks),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(oneDrink),
+    }));
     global.alert = jest.fn();
   });
+
   afterEach(() => {
     jest.resetAllMocks();
   });
 
-  it('Testa se todos os inputs estão na tela, /drinks', async () => {
+  it('Testando as respostas da API ao fazer as pesquisas no campo de buscas enquanto estiver na url /drinks', async () => {
+    const {history} = renderWithRouter(<Provider><Drinks /></Provider>, ['/drinks']);
+    expect(history.location.pathname).toBe('/drinks');
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=");
+      expect(global.fetch).toHaveBeenCalledWith("https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list");
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+    
+    const searchBtn = screen.getByRole('button', { name: /searchicon/i });
+    userEvent.click(searchBtn);
+    
+    const textInput = screen.getByTestId('search-input');
+    const ingredientRadio = screen.getByRole('radio', { name: /ingredient/i });
+    const nameRadio = screen.getByRole('radio', { name: /name/i });
+    const firstLetterRadio = screen.getByRole('radio', { name: /first letter/i });
+    const submitBtn = screen.getByRole('button', { name: /submit/i });
 
-    const {history} = renderWithRouter(<Provider><Drinks /></Provider>);
+    
+    userEvent.type(textInput, 'Light rum');
+    userEvent.click(ingredientRadio);
+    userEvent.click(submitBtn);
+    
+    await  waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith('https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=Light rum');
+      expect(global.fetch).toHaveBeenCalledTimes(3);
+    });
+    expect(screen.getByText(/151 Florida Bushwacker/i)).toBeInTheDocument();
 
-    history.push('/drinks')
+    userEvent.clear(textInput);
+    userEvent.type(textInput, 'gin');
+    userEvent.click(nameRadio);
+    userEvent.click(submitBtn);
+    
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=gin');
+      expect(global.fetch).toHaveBeenCalledTimes(4);
+    });
+    expect(screen.getByText(/Gin Fizz/i)).toBeInTheDocument();
 
-    const searchBtn = screen.getByTestId('search-top-btn');
+    // Aguardando tela de uma receita ser desenvolvida
+    userEvent.clear(textInput);
+    userEvent.type(textInput, 'Aquamarine');
+    userEvent.click(nameRadio);
+    userEvent.click(submitBtn);
+    
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=Aquamarine');
+      expect(global.fetch).toHaveBeenCalledTimes(5);
+    })
+    expect(history.location.pathname).toBe('/drinks/178319');
+    // expect(screen.getByText(/Aquamarine/i)).toBeInTheDocument();
+  });
+})
 
+describe('Testando componente SearchBar', () => {
+  beforeEach(() => {
+    jest.spyOn(global, 'fetch').mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(meals),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(mealCategories),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(firstLetterMeal),
+    }));
+    global.alert = jest.fn();
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it('testando a busca de refeições com a opção de apenas a primeira letra selecionada no filtro estando na url /foods', async() => {
+    const {history} = renderWithRouter(<Provider><Foods /></Provider>, ['/foods']);
+    expect(history.location.pathname).toBe('/foods');
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith("https://www.themealdb.com/api/json/v1/1/search.php?s=");
+      expect(global.fetch).toHaveBeenCalledWith("https://www.themealdb.com/api/json/v1/1/list.php?c=list");
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+
+    const searchBtn = screen.getByRole('button', { name: /searchicon/i });
     userEvent.click(searchBtn);
 
     const textInput = screen.getByTestId('search-input');
-    const ingredientRadio = screen.getByTestId('ingredient-search-radio');
-    const nameRadio = screen.getByTestId('name-search-radio');
-    const firstRadio = screen.getByTestId('first-letter-search-radio');
-    const submitBtn = screen.getByTestId('exec-search-btn');
+    const firstLetterRadio = screen.getByRole('radio', { name: /first letter/i });
+    const submitBtn = screen.getByRole('button', { name: /submit/i });
 
-    userEvent.type(textInput, 'Ice');
-    userEvent.click(ingredientRadio);
-    userEvent.click(submitBtn);
-
-    await  waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith('https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=Ice')
-    })
-
-    userEvent.click(nameRadio);
-    userEvent.click(submitBtn);
-
-    await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=Ice')
-    })
-
-    userEvent.clear(textInput);
     userEvent.type(textInput, 'o');
-    userEvent.click(firstRadio);
+    userEvent.click(firstLetterRadio);
     userEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith('https://www.thecocktaildb.com/api/json/v1/1/search.php?f=o')
-    })
+      expect(global.fetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?f=o');
+      expect(global.fetch).toHaveBeenCalledTimes(3);
+    });
+    expect(screen.getByText(/Osso Buco alla Milanese/i)).toBeInTheDocument();
+  });
+});
+
+describe('Testando componente SearchBar', () => {
+  beforeEach(() => {
+    jest.spyOn(global, 'fetch').mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(drinks),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(drinkCategories),
+    })).mockImplementationOnce(() => Promise.resolve({
+      json: () => Promise.resolve(firstLetterDrinks),
+    }));
+    global.alert = jest.fn();
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it('testando a busca de refeições com a opção de apenas a primeira letra selecionada no filtro estando na url /drinks', async() => {
+    const {history} = renderWithRouter(<Provider><Drinks /></Provider>, ['/drinks']);
+    expect(history.location.pathname).toBe('/drinks');
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=");
+      expect(global.fetch).toHaveBeenCalledWith("https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list");
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+
+    const searchBtn = screen.getByRole('button', { name: /searchicon/i });
+    userEvent.click(searchBtn);
+
+    const textInput = screen.getByTestId('search-input');
+    const firstLetterRadio = screen.getByRole('radio', { name: /first letter/i });
+    const submitBtn = screen.getByRole('button', { name: /submit/i });
+
+    userEvent.type(textInput, 'o');
+    userEvent.click(firstLetterRadio);
+    userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith('https://www.thecocktaildb.com/api/json/v1/1/search.php?f=o');
+      expect(global.fetch).toHaveBeenCalledTimes(3);
+    });
+    expect(screen.getByText(/Orgasm/i)).toBeInTheDocument();
   });
 });

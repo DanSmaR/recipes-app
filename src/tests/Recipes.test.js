@@ -15,6 +15,7 @@ import drinkCategories from '../../cypress/mocks/drinkCategories';
 import ordinaryDrinks from '../../cypress/mocks/ordinaryDrinks';
 import { URLMealsArr, URLDrinksArr } from '../utils/constants';
 import Drinks from '../pages/Drinks';
+import { act } from 'react-dom/test-utils';
 
 describe('Testa o componente RECIPES na url /foods', () => {
   beforeEach(() => {
@@ -34,28 +35,32 @@ describe('Testa o componente RECIPES na url /foods', () => {
   });
 
   it('Renderiza todos os elementos corretamente', async() => {
-    const { history } = renderWithRouter(<RecipesProvider><Foods /></RecipesProvider>, ['/foods'])
+    const { history } = renderWithRouter(<RecipesProvider><Foods /></RecipesProvider>, ['/foods']);
+    expect(history.location.pathname).toBe('/foods');
+
     await  waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith("https://www.themealdb.com/api/json/v1/1/search.php?s=")
-      expect(fetch).toHaveBeenCalledWith("https://www.themealdb.com/api/json/v1/1/list.php?c=list")
-      expect(global.fetch).toHaveBeenCalledTimes(2)
-    })
-    const firstFilterBtn = await screen.findByTestId('Beef-category-filter');
-    expect(firstFilterBtn).toBeInTheDocument()
-    userEvent.click(firstFilterBtn)
+      expect(global.fetch).toHaveBeenCalledWith("https://www.themealdb.com/api/json/v1/1/search.php?s=");
+      expect(global.fetch).toHaveBeenCalledWith("https://www.themealdb.com/api/json/v1/1/list.php?c=list");
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+
+    const firstFilterBtn = screen.getByTestId('Beef-category-filter');
+    expect(firstFilterBtn).toBeInTheDocument();
+    
+    userEvent.click(firstFilterBtn);
     await  waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith("https://www.themealdb.com/api/json/v1/1/filter.php?c=Beef")
+      expect(global.fetch).toHaveBeenCalledWith("https://www.themealdb.com/api/json/v1/1/filter.php?c=Beef")
       expect(global.fetch).toHaveBeenCalledTimes(3)
-    })
+    });
     expect(screen.getByText(/beef and mustard pie/i)).toBeInTheDocument();
+    
     userEvent.click(firstFilterBtn)
+    
     await  waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith("https://www.themealdb.com/api/json/v1/1/search.php?s=")
+      expect(global.fetch).toHaveBeenCalledWith("https://www.themealdb.com/api/json/v1/1/search.php?s=")
       expect(global.fetch).toHaveBeenCalledTimes(4)
     })
     expect(screen.getByText(/corba/i)).toBeInTheDocument();
-
-    screen.logTestingPlaygroundURL()
   });
 });
 
@@ -72,29 +77,34 @@ describe('Testa o componente RECIPES na url /drinks', () => {
     }))
     global.alert = jest.fn();
   });
+
   afterEach(() => {
     jest.resetAllMocks();
   });
 
   it('Renderiza todos os elementos corretamente', async() => {
-    const { history } = renderWithRouter(<RecipesProvider><Drinks /></RecipesProvider>, ['/drinks'])
+    const { history } = renderWithRouter(<RecipesProvider><Drinks /></RecipesProvider>, ['/drinks']);
+    expect(history.location.pathname).toBe('/drinks');
+
     await  waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=")
-      expect(fetch).toHaveBeenCalledWith("https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list")
+      expect(global.fetch).toHaveBeenCalledWith("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=")
+      expect(global.fetch).toHaveBeenCalledWith("https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list")
       expect(global.fetch).toHaveBeenCalledTimes(2)
-    })
-    const firstFilterBtn = await screen.findByTestId('Ordinary Drink-category-filter');
-    expect(firstFilterBtn).toBeInTheDocument()
-    userEvent.click(firstFilterBtn)
+    });
+
+    const firstFilterBtn = screen.getByTestId('Ordinary Drink-category-filter');
+    expect(firstFilterBtn).toBeInTheDocument();
+    
+    userEvent.click(firstFilterBtn);
     await  waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith("https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=Ordinary Drink")
-      expect(global.fetch).toHaveBeenCalledTimes(3)
-    })
-    screen.logTestingPlaygroundURL()
+      expect(global.fetch).toHaveBeenCalledWith("https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=Ordinary Drink")
+      expect(global.fetch).toHaveBeenCalledTimes(3);
+    });
     expect(screen.getByText(/3\-mile long island iced tea/i)).toBeInTheDocument();
+    
     userEvent.click(firstFilterBtn)
     await  waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=")
+      expect(global.fetch).toHaveBeenCalledWith("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=")
       expect(global.fetch).toHaveBeenCalledTimes(4)
     })
     expect(screen.getByText(/gg/i)).toBeInTheDocument();    
@@ -111,26 +121,36 @@ describe('Testa o botão All do  componente RECIPES na url /drinks', () => {
       json: () => Promise.resolve(ordinaryDrinks),
     })).mockImplementationOnce(() => Promise.resolve({
       json: () => Promise.resolve(drinks),
-    }))
+    }));
     global.alert = jest.fn();
   });
+
   afterEach(() => {
     jest.resetAllMocks();
   });
 
   it('Renderiza todos os elementos corretamente', async() => {
-    const { history } = renderWithRouter(<RecipesProvider><Drinks /></RecipesProvider>, ['/drinks'])
+    const { history } = renderWithRouter(<RecipesProvider><Drinks /></RecipesProvider>, ['/drinks']);
+    expect(history.location.pathname).toBe('/drinks');
+
     await  waitFor(() => {
-        expect(fetch).toHaveBeenCalledWith("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=")
-        expect(fetch).toHaveBeenCalledWith("https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list")
-        expect(global.fetch).toHaveBeenCalledTimes(2)
-    })
-    const firstFilterBtn = await screen.findByTestId('Ordinary Drink-category-filter');
-    userEvent.click(firstFilterBtn)
+        expect(global.fetch).toHaveBeenCalledWith("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=");
+        expect(global.fetch).toHaveBeenCalledWith("https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list");
+        expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+
+    const firstFilterBtn = screen.getByTestId('Ordinary Drink-category-filter');
+    
+    userEvent.click(firstFilterBtn);
+    await waitFor(() => {
+        expect(global.fetch).toHaveBeenCalledWith("https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=Ordinary Drink");
+        expect(global.fetch).toHaveBeenCalledTimes(3);
+    });
+
+    userEvent.click(screen.getByRole('button', { name: /all/i}));
     await  waitFor(() => {
-        expect(fetch).toHaveBeenCalledWith("https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=Ordinary Drink")
-        expect(global.fetch).toHaveBeenCalledTimes(3)
-    })
-    userEvent.click(screen.getByRole('button', {  name: /all/i}))
+      expect(global.fetch).toHaveBeenCalledWith("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=");
+      expect(global.fetch).toHaveBeenCalledTimes(4);
+    }); 
   });
 });
