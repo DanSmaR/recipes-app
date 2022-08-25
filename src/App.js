@@ -10,6 +10,7 @@ import Foods from './pages/Foods';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
 import RecipeDetails from './pages/RecipeDetails';
+import RecipeInProgress from './pages/RecipeInProgress';
 
 export default function App() {
   return (
@@ -31,6 +32,16 @@ export default function App() {
             exact
             path="/drinks/:idRecipe"
             render={ (props) => <RecipeDetails { ...props } /> }
+          />
+          <Route
+            exact
+            path="/foods/:idRecipe/in-progress"
+            render={ (props) => <RecipeInProgress { ...props } /> }
+          />
+          <Route
+            exact
+            path="/drinks/:idRecipe/in-progress"
+            render={ (props) => <RecipeInProgress { ...props } /> }
           />
         </Switch>
       </BrowserRouter>

@@ -11,6 +11,7 @@ export default function Card({ recipes, index }) {
       <li>
         <Link data-testid={ `${id}-recipe-card` } to={ `/foods/${id}` }>
           <img
+            className="meal-img"
             data-testid={ `${id}-card-img` }
             src={ img }
             alt={ name }

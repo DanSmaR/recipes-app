@@ -8,9 +8,9 @@ export default function RecipesProvider({ children }) {
 
   const obj = {
     state,
+    searchFood,
     setState,
     setSearchFood,
-    searchFood,
   };
 
   return (

@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Carousel } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
+import CardRecomend from '../components/CardRecomend';
 import Loading from '../components/Loading';
+import { setDetails } from '../tests/helpers/setDetails';
 
-const MINMEALS = 9;
-const MAXMEALS = 28;
-const MINDRINKS = 17;
-const MAXDRINKS = 31;
-const MINMEASU = 29;
-const MAXMEASU = 48;
-const MINMEASUD = 32;
-const MAXMEASUD = 47;
+const NUMBER_RECOMENDATION = 5;
+const copy = require('clipboard-copy');
 
 export default function RecipeDetails(props) {
   const { match: { params: { idRecipe } } } = props;
@@ -20,86 +18,143 @@ export default function RecipeDetails(props) {
   const [allIngredients, setAllIngredients] = useState([]);
   const [measure, setMeasure] = useState([]);
   const [recomendation, setRecomendetion] = useState([]);
+  const [doneRecipe, setDoneRecipe] = useState(false);
+  const [inProgressRecipes, setInProgress] = useState('Start Recipe');
+  const [favoriteOk, setFavoriteOk] = useState(whiteHeartIcon);
+  const [displayMessage, setDisplayMessage] = useState(false);
 
+  if (localStorage.getItem('doneRecipes') === null) {
+    localStorage.setItem('doneRecipes', JSON.stringify([]));
+  }
+  if (localStorage.getItem('inProgressRecipes') === null) {
+    localStorage.setItem('inProgressRecipes', JSON.stringify([]));
+  }
+  if (localStorage.getItem('favoriteRecipes') === null) {
+    localStorage.setItem('favoriteRecipes', JSON.stringify([]));
+  }
+  const urlFetch = async (id) => {
+    let path = 'drinks';
+    let url = '';
+    if (pathname.includes('foods')) {
+      path = 'meals';
+      url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
+      const dataRecomendation = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=')
+        .then((response) => response.json());
+      setRecomendetion(dataRecomendation.drinks
+        .filter((_, i) => i >= 0 && i <= NUMBER_RECOMENDATION));
+    } else {
+      path = 'drinks';
+      url = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
+      const dataRecomendation = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=')
+        .then((response) => response.json());
+      setRecomendetion(dataRecomendation.meals
+        .filter((_, i) => i >= 0 && i <= NUMBER_RECOMENDATION));
+    }
+    const data = await fetch(url).then((response) => response.json());
+    setDataRecipe(data[path]);
+    setMeasure(Object.keys(data[path][0])
+      .filter((key) => key.includes('Measure'))
+      .map((key) => data[path][0][key])
+      .filter((e) => (e !== ''))
+      .filter((e) => e !== null));
+    setAllIngredients(Object.keys(data[path][0])
+      .filter((key) => key.includes('Ingredien'))
+      .map((key) => data[path][0][key])
+      .filter((e) => e !== '')
+      .filter((e) => e !== null));
+  };
+  function toggleMessageLinkCopied() {
+    copy(`http://localhost:3000${pathname}`);
+    setDisplayMessage(true);
+  }
   useEffect(() => {
-    const urlFetch = async (id) => {
-      if (pathname.includes('foods')) {
-        const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
-        const urlRecomendation = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
-        const dataRecomendation = await fetch(urlRecomendation)
-          .then((response) => response.json());
-        const data = await fetch(url).then((response) => response.json());
-        setRecomendetion(dataRecomendation.drinks.filter((_, i) => i >= 0 && i <= 5));
-        setDataRecipe(data.meals);
-        const dataMap = Object.keys(data.meals[0])
-          .map((key) => data.meals[0][key])
-          .filter((e, i) => (i >= MINMEALS && i <= MAXMEALS && e !== ''));
-        const measures = Object.keys(data.meals[0])
-          .map((key) => data.meals[0][key])
-          .filter((e, i) => (i >= MINMEASU && i <= MAXMEASU && e !== ''));
-        setMeasure(measures);
-        setAllIngredients(dataMap);
-      } else {
-        const url = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
-        const urlRecomendation = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
-        const dataRecomendation = await fetch(urlRecomendation)
-          .then((response) => response.json());
-        setRecomendetion(dataRecomendation.meals.filter((_, i) => i >= 0 && i <= 5));
-        const data = await fetch(url).then((response) => response.json());
-        const dataMap = Object.keys(data.drinks[0])
-          .map((key) => data.drinks[0][key])
-          .filter((e, i) => (i >= MINDRINKS && i <= MAXDRINKS && e !== null));
-        const measures = Object.keys(data.drinks[0])
-          .map((key) => data.drinks[0][key])
-          .filter((e, i) => (i >= MINMEASUD && i <= MAXMEASUD && e !== null));
-        setMeasure(measures);
-        setAllIngredients(dataMap);
-        setDataRecipe(data.drinks);
-      }
+    const TIMEOUT = 2000;
+    let timerId = '';
+    if (displayMessage) {
+      timerId = setTimeout(setDisplayMessage, TIMEOUT, false);
+    }
+    return () => {
+      clearTimeout(timerId);
     };
-
+  }, [displayMessage]);
+  useEffect(() => {
+    JSON.parse(localStorage.getItem('favoriteRecipes')).forEach((e) => {
+      if (e.id === idRecipe) {
+        setFavoriteOk(blackHeartIcon);
+      }
+    });
+    JSON.parse(localStorage.getItem('doneRecipes')).forEach((e) => {
+      if (e.id === idRecipe) {
+        setDoneRecipe(true);
+      }
+    });
+    if (JSON.parse(localStorage.getItem('inProgressRecipes').includes(idRecipe))) {
+      setInProgress('Continue Recipe');
+    }
     urlFetch(idRecipe);
   }, []);
-  // img
-  // French Onion Soup
-  // comida ingrediente 20 - bebida 15 (strIngredient1)
-  // Kir Royale
-
-  function getId(url) {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-
-    return (match && match[2].length === 11)
-      ? match[2]
-      : null;
-  }
-
-  const renderDetails = (obj) => (
+  const favoritar = (favorito) => {
+    const listaDeFavoritos = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    if (favoriteOk === whiteHeartIcon) {
+      localStorage
+        .setItem('favoriteRecipes',
+          JSON.stringify([...listaDeFavoritos, favorito]));
+      setFavoriteOk(blackHeartIcon);
+    } else {
+      const newFavorites = JSON.parse(localStorage.getItem('favoriteRecipes'))
+        .filter((e) => e.id !== idRecipe);
+      localStorage
+        .setItem('favoriteRecipes',
+          JSON.stringify([...listaDeFavoritos, newFavorites]));
+      setFavoriteOk(whiteHeartIcon);
+    }
+  };
+  const renderDetails = (obj, favorito) => (
     <div>
+      <button
+        data-testid="share-btn"
+        type="button"
+        onClick={ () => toggleMessageLinkCopied() }
+      >
+        Share
+      </button>
+      {displayMessage && <span>Link copied!</span>}
+      <button
+        data-testid="favorite-btn"
+        type="button"
+        onClick={ () => favoritar(favorito) }
+        src={ favoriteOk }
+      >
+        <img
+          src={ favoriteOk }
+          alt="favoritado"
+        />
+      </button>
       <img
+        className="meal-img"
         src={ obj.image }
         data-testid="recipe-photo"
         alt={ obj.name }
       />
-
       <h1 data-testid="recipe-title">{obj.name}</h1>
       <h2 data-testid="recipe-category">{obj.category}</h2>
-
-      { allIngredients.map((e, i) => (
-        <label htmlFor={ e } key={ i } data-testid={ `${i}-ingredient-name-and-measure` }>
-          { e }
-          { measure[i] }
-          <input
-            type="checkbox"
-            id={ obj.name }
-            name={ obj.name }
-            value={ e }
-          />
-        </label>
-      )) }
-
+      <div>
+        { allIngredients.map((e, i) => (
+          <p
+            key={ i }
+            data-testid={ `${i}-ingredient-name-and-measure` }
+          >
+            -
+            {' '}
+            {e}
+            {' '}
+            -
+            {' '}
+            { measure[i] }
+          </p>
+        )) }
+      </div>
       <p data-testid="instructions">{obj.instrucao}</p>
-
       { obj.video !== null && <iframe
         data-testid="video"
         title={ `Video Fazendo ${obj.name}` }
@@ -107,34 +162,57 @@ export default function RecipeDetails(props) {
         height="315"
         src={ `//www.youtube.com/embed/${obj.video}` }
       /> }
-
-      <p data-testid="0-recomendation-card">oi</p>
-
+      <div className="slider">
+        <div className="slides">
+          { recomendation.map((e, i) => (
+            <div
+              className="slides-cards"
+              key={ i }
+              id={ `slide-${i}` }
+            >
+              <CardRecomend
+                path={ pathname }
+                recipes={ e }
+                index={ i }
+              />
+            </div>
+          )) }
+        </div>
+      </div>
+      { doneRecipe === false && (
+        <button
+          type="button"
+          className="progress-btn"
+          data-testid="start-recipe-btn"
+          onClick={ () => {
+            const emProgresso = JSON.parse(localStorage.getItem('inProgressRecipes'));
+            localStorage
+              .setItem('info', JSON.stringify([dataRecipe[0], allIngredients, idRecipe]));
+            localStorage
+              .setItem('inProgressRecipes', JSON
+                .stringify([...emProgresso, idRecipe, favorito]));
+            history.push(`${pathname}/in-progress`);
+          } }
+        >
+          { inProgressRecipes }
+        </button>
+      )}
     </div>
   );
-  let renderizacao = '';
-  if (pathname.includes('foods') && dataRecipe.length !== 0) {
-    console.log(recomendation);
-    renderizacao = {
-      image: dataRecipe[0].strMealThumb,
-      name: dataRecipe[0].strMeal,
-      category: dataRecipe[0].strCategory,
-      video: getId(dataRecipe[0].strYoutube),
-      instrucao: dataRecipe[0].strInstructions,
-    };
-  } else if (pathname.includes('drinks') && dataRecipe.length !== 0) {
-    console.log(recomendation);
-    renderizacao = {
-      image: dataRecipe[0].strDrinkThumb,
-      name: dataRecipe[0].strDrink,
-      category: dataRecipe[0].strAlcoholic,
-      video: null,
-      instrucao: dataRecipe[0].strInstructions,
-    };
-  }
+  const parametros = setDetails(pathname, dataRecipe, idRecipe);
   return (
     <div>
-      { dataRecipe.length === 0 ? <Loading /> : renderDetails(renderizacao) }
+      { dataRecipe.length === 0 ? <Loading /> : renderDetails(
+        parametros[0], parametros[1],
+      ) }
     </div>
   );
 }
+
+RecipeDetails.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      idRecipe: PropTypes.string.isRequired,
+    }),
+  }).isRequired,
+};
