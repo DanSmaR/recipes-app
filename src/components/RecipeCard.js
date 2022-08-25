@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import RecipesContext from '../context/RecipesContext';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 const copy = require('clipboard-copy');
 
 function RecipeCard(props) {
+  const { setFavorites } = useContext(RecipesContext);
   const { recipe, index } = props;
   const [displayMessage, setDisplayMessage] = useState(false);
   const history = useHistory();
@@ -16,10 +18,11 @@ function RecipeCard(props) {
     setDisplayMessage(true);
   }
 
-  function handleUnfavorite(recipe) {
-    const storage = localStorage.getItem('favoriteRecipes');
-    const newStorage = storage.filter((e) => e !== recipe);
-    localStorage.setItem('favoriteRecipes', newStorage);
+  function handleUnfavorite(id) {
+    const storage = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    const newStorage = storage.filter((e) => e.id !== id);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(newStorage));
+    setFavorites(newStorage);
   }
 
   useEffect(() => {
@@ -72,7 +75,6 @@ function RecipeCard(props) {
           >
             <h2 data-testid={ `${index}-horizontal-name` }>{ name }</h2>
           </Link>
-          {console.log(pathname)}
           {pathname !== '/favorite-recipes' ? (
             <p>
               Done in:
@@ -87,8 +89,13 @@ function RecipeCard(props) {
             : (
               <button
                 type="button"
+                onClick={ () => handleUnfavorite(id) }
               >
-                <img src={ blackHeartIcon } alt="blackHeartIcon" />
+                <img
+                  data-testid={ `${index}-horizontal-favorite-btn` }
+                  src={ blackHeartIcon }
+                  alt="blackHeartIcon"
+                />
               </button>
             )}
           <div>

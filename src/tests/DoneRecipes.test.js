@@ -6,6 +6,7 @@ import React from 'react';
 import DoneRecipes from '../pages/DoneRecipes';
 import renderWithRouter from './helpers/renderWithRouter';
 import doneRecipes from "../utils/mocks/doneRecipesLocalStorage";
+import RecipesProvider from '../context/RecipesProvider';
 
 const copy = require('clipboard-copy');
 const linkCopied = 'http://localhost:3000/foods/52771';
@@ -25,7 +26,7 @@ describe('Testa a página Done Recipes', () => {
 
   it('Renderiza todos os elementos corretamente', () => {
     localStorage.getItem.mockReturnValue(doneRecipesStringified);
-    renderWithRouter(<DoneRecipes />);
+    renderWithRouter(<RecipesProvider><DoneRecipes /></RecipesProvider>);
     const allFilterBtn = screen.getByRole('button', {  name: /all/i});
     const foodFilterBtn = screen.getByRole('button', {  name: /foods/i});
     const drinkFilterBtn = screen.getByRole('button', {  name: /drinks/i});
@@ -55,7 +56,7 @@ describe('Testa a página Done Recipes', () => {
       },
     });
     localStorage.getItem.mockReturnValue(doneRecipesStringified);
-    renderWithRouter(<DoneRecipes />);
+    renderWithRouter(<RecipesProvider><DoneRecipes /></RecipesProvider>);
     const shareBtn = screen.getAllByRole('button', { name: /share icon/i });
 
     userEvent.click(shareBtn[0]);
@@ -64,7 +65,7 @@ describe('Testa a página Done Recipes', () => {
 
   it('Verifica se o botao de compartilhar copia o link da receita', () => {
     localStorage.getItem.mockReturnValue(null);
-    renderWithRouter(<DoneRecipes />);
+    renderWithRouter(<RecipesProvider><DoneRecipes /></RecipesProvider>);
     screen.logTestingPlaygroundURL();
     expect(screen.queryByRole('img', { name: /aquamarine/i })).not.toBeInTheDocument();
   });
