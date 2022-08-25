@@ -1,16 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import RecipesContext from '../context/RecipesContext';
 import shareIcon from '../images/shareIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 const copy = require('clipboard-copy');
 
 function RecipeCard(props) {
+  const { setFavorites } = useContext(RecipesContext);
   const { recipe, index } = props;
   const [displayMessage, setDisplayMessage] = useState(false);
+  const history = useHistory();
+  const { location: { pathname } } = history;
 
   function toggleMessageLinkCopied(id, type) {
     copy(`http://localhost:3000/${type}s/${id}`);
     setDisplayMessage(true);
+  }
+
+  function handleUnfavorite(id) {
+    const storage = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    const newStorage = storage.filter((e) => e.id !== id);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(newStorage));
+    setFavorites(newStorage);
   }
 
   useEffect(() => {
@@ -63,16 +75,29 @@ function RecipeCard(props) {
           >
             <h2 data-testid={ `${index}-horizontal-name` }>{ name }</h2>
           </Link>
-          <p>
-            Done in:
-            {' '}
-            <time
-              dateTime={ doneDate.split('/').reverse().join('-') }
-              data-testid={ `${index}-horizontal-done-date` }
-            >
-              { doneDate }
-            </time>
-          </p>
+          {pathname !== '/favorite-recipes' ? (
+            <p>
+              Done in:
+              {' '}
+              <time
+                dateTime={ doneDate.split('/').reverse().join('-') }
+                data-testid={ `${index}-horizontal-done-date` }
+              >
+                { doneDate }
+              </time>
+            </p>)
+            : (
+              <button
+                type="button"
+                onClick={ () => handleUnfavorite(id) }
+              >
+                <img
+                  data-testid={ `${index}-horizontal-favorite-btn` }
+                  src={ blackHeartIcon }
+                  alt="blackHeartIcon"
+                />
+              </button>
+            )}
           <div>
             {
               tags && tags.map((tag) => (
