@@ -74,4 +74,10 @@ describe('Testa a página Done Recipes', () => {
     expect(screen.getByRole('img', { name: /aquamarine/i })).toBeInTheDocument();
   });
 
+  it('Não deve haver receitas na tela caso não há uma chave favoriteRecipes no localStorage', () => {
+    localStorage.getItem.mockReturnValue(null);
+    renderWithRouter(<RecipesProvider><FavoriteRecipes /></RecipesProvider>, ['/favorite-recipes']);
+    screen.logTestingPlaygroundURL();
+    expect(screen.queryByRole('img', { name: /aquamarine/i })).not.toBeInTheDocument();
+  });
 })

@@ -63,7 +63,7 @@ describe('Testa a página Done Recipes', () => {
     expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith(linkCopied);
   });
 
-  it('Verifica se o botao de compartilhar copia o link da receita', () => {
+  it('Não deve haver receitas na tela caso não há uma chave doneRecipes no localStorage', () => {
     localStorage.getItem.mockReturnValue(null);
     renderWithRouter(<RecipesProvider><DoneRecipes /></RecipesProvider>);
     screen.logTestingPlaygroundURL();
