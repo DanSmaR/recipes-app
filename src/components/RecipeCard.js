@@ -14,12 +14,10 @@ function RecipeCard(props) {
   }
 
   useEffect(() => {
-    const timeOut = 2000;
+    const TIMEOUT = 2000;
     let timerId = '';
     if (displayMessage) {
-      timerId = setTimeout(() => {
-        setDisplayMessage(false);
-      }, timeOut);
+      timerId = setTimeout(setDisplayMessage, TIMEOUT, false);
     }
 
     return () => {
@@ -69,7 +67,7 @@ function RecipeCard(props) {
             Done in:
             {' '}
             <time
-              dateTime={ doneDate }
+              dateTime={ doneDate.split('/').reverse().join('-') }
               data-testid={ `${index}-horizontal-done-date` }
             >
               { doneDate }
