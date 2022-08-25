@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import shareIcon from '../images/shareIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 const copy = require('clipboard-copy');
 
 function RecipeCard(props) {
   const { recipe, index } = props;
   const [displayMessage, setDisplayMessage] = useState(false);
+  const history = useHistory();
+  const { location: { pathname } } = history;
 
   function toggleMessageLinkCopied(id, type) {
     copy(`http://localhost:3000/${type}s/${id}`);
     setDisplayMessage(true);
+  }
+
+  function handleUnfavorite(recipe) {
+    const storage = localStorage.getItem('favoriteRecipes');
+    const newStorage = storage.filter((e) => e !== recipe);
+    localStorage.setItem('favoriteRecipes', newStorage);
   }
 
   useEffect(() => {
@@ -63,16 +72,25 @@ function RecipeCard(props) {
           >
             <h2 data-testid={ `${index}-horizontal-name` }>{ name }</h2>
           </Link>
-          <p>
-            Done in:
-            {' '}
-            <time
-              dateTime={ doneDate.split('/').reverse().join('-') }
-              data-testid={ `${index}-horizontal-done-date` }
-            >
-              { doneDate }
-            </time>
-          </p>
+          {console.log(pathname)}
+          {pathname !== '/favorite-recipes' ? (
+            <p>
+              Done in:
+              {' '}
+              <time
+                dateTime={ doneDate.split('/').reverse().join('-') }
+                data-testid={ `${index}-horizontal-done-date` }
+              >
+                { doneDate }
+              </time>
+            </p>)
+            : (
+              <button
+                type="button"
+              >
+                <img src={ blackHeartIcon } alt="blackHeartIcon" />
+              </button>
+            )}
           <div>
             {
               tags && tags.map((tag) => (
