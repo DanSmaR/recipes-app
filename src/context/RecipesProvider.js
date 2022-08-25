@@ -5,12 +5,16 @@ import RecipesContext from './RecipesContext';
 export default function RecipesProvider({ children }) {
   const [state, setState] = useState([]);
   const [searchFood, setSearchFood] = useState({ init: 0 });
+  const [favorites, setFavorites] = useState([]);
 
   const obj = {
     state,
     searchFood,
     setState,
     setSearchFood,
+    searchFood,
+    favorites,
+    setFavorites,
   };
 
   return (
