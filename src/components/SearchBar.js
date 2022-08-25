@@ -61,7 +61,6 @@ export default function SearchBar() {
         .then((response) => response.json());
       break;
     }
-    console.log(results);
     if (results.drinks === null || results.meals === null) {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
       results = [];
