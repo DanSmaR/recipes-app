@@ -1,10 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '../components/Header';
+import RecipeCard from '../components/RecipeCard';
 
 export default function DoneRecipes() {
+  const initialRecipes = JSON.parse(localStorage.getItem('doneRecipes')) || [];
+  const [activeRecipeType, setActiveRecipeType] = useState('all');
   return (
     <div>
       <Header title="Done Recipes" />
-    </div>
-  );
+      <ul className="filter-container">
+        <li>
+          <button
+            className="filterBtn"
+            type="button"
+            data-testid="filter-by-all-btn"
+            onClick={ () => setActiveRecipeType('all') }
+          >
+            All
+          </button>
+        </li>
+        <li>
+          <button
+            className="filterBtn"
+            type="button"
+            data-testid="filter-by-food-btn"
+            onClick={ () => setActiveRecipeType('food') }
+          >
+            Foods
+          </button>
+        </li>
+        <li>
+          <button
+            className="filterBtn"
+            type="button"
+            data-testid="filter-by-drink-btn"
+            onClick={ () => setActiveRecipeType('drink') }
+          >
+            Drinks
+          </button>
+        </li>
+      </ul>
+      {
+        initialRecipes.length !== 0
+      && initialRecipes
+        .filter((recipe) => activeRecipeType === 'all'
+          || recipe.type === activeRecipeType)
+        .map((recipe, index) => (
+          <RecipeCard
+            key={ index }
+            type={ recipe.type }
+            recipe={ recipe }
+            index={ index }
+          />))
+      }
+    </div>);
 }
