@@ -24,8 +24,11 @@ describe('Testa a página Done Recipes', () => {
   })
 
   it('Renderiza todos os elementos corretamente', () => {
+
     localStorage.getItem.mockReturnValue(doneRecipesStringified);
+
     renderWithRouter(<DoneRecipes />);
+
     const allFilterBtn = screen.getByRole('button', {  name: /all/i});
     const foodFilterBtn = screen.getByRole('button', {  name: /foods/i});
     const drinkFilterBtn = screen.getByRole('button', {  name: /drinks/i});
@@ -54,8 +57,11 @@ describe('Testa a página Done Recipes', () => {
         writeText: jest.fn().mockImplementation((linkCopied) => Promise.resolve(linkCopied)),
       },
     });
+
     localStorage.getItem.mockReturnValue(doneRecipesStringified);
+
     renderWithRouter(<DoneRecipes />);
+
     const shareBtn = screen.getAllByRole('button', { name: /share icon/i });
 
     userEvent.click(shareBtn[0]);
@@ -63,9 +69,11 @@ describe('Testa a página Done Recipes', () => {
   });
 
   it('Verifica se o botao de compartilhar copia o link da receita', () => {
+
     localStorage.getItem.mockReturnValue(null);
+
     renderWithRouter(<DoneRecipes />);
-    screen.logTestingPlaygroundURL();
+    
     expect(screen.queryByRole('img', { name: /aquamarine/i })).not.toBeInTheDocument();
   });
 })

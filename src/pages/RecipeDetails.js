@@ -105,7 +105,7 @@ export default function RecipeDetails(props) {
         .filter((e) => e.id !== idRecipe);
       localStorage
         .setItem('favoriteRecipes',
-          JSON.stringify([...listaDeFavoritos, newFavorites]));
+          JSON.stringify(newFavorites));
       setFavoriteOk(whiteHeartIcon);
     }
   };
@@ -186,6 +186,7 @@ export default function RecipeDetails(props) {
           data-testid="start-recipe-btn"
           onClick={ () => {
             const emProgresso = JSON.parse(localStorage.getItem('inProgressRecipes'));
+            console.log(emProgresso, dataRecipe, allIngredients, idRecipe, pathname);
             localStorage
               .setItem('info', JSON.stringify([dataRecipe[0], allIngredients, idRecipe]));
             localStorage

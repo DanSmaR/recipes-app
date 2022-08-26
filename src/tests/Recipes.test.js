@@ -35,6 +35,7 @@ describe('Testa o componente RECIPES na url /foods', () => {
   });
 
   it('Renderiza todos os elementos corretamente', async() => {
+
     const { history } = renderWithRouter(<RecipesProvider><Foods /></RecipesProvider>, ['/foods']);
     expect(history.location.pathname).toBe('/foods');
 
@@ -48,6 +49,7 @@ describe('Testa o componente RECIPES na url /foods', () => {
     expect(firstFilterBtn).toBeInTheDocument();
     
     userEvent.click(firstFilterBtn);
+    
     await  waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith("https://www.themealdb.com/api/json/v1/1/filter.php?c=Beef")
       expect(global.fetch).toHaveBeenCalledTimes(3)
@@ -59,7 +61,7 @@ describe('Testa o componente RECIPES na url /foods', () => {
     await  waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith("https://www.themealdb.com/api/json/v1/1/search.php?s=")
       expect(global.fetch).toHaveBeenCalledTimes(4)
-    })
+    });
     expect(screen.getByText(/corba/i)).toBeInTheDocument();
   });
 });
@@ -83,6 +85,7 @@ describe('Testa o componente RECIPES na url /drinks', () => {
   });
 
   it('Renderiza todos os elementos corretamente', async() => {
+    
     const { history } = renderWithRouter(<RecipesProvider><Drinks /></RecipesProvider>, ['/drinks']);
     expect(history.location.pathname).toBe('/drinks');
 
@@ -130,7 +133,8 @@ describe('Testa o botão All do  componente RECIPES na url /drinks', () => {
   });
 
   it('Renderiza todos os elementos corretamente', async() => {
-    const { history } = renderWithRouter(<RecipesProvider><Drinks /></RecipesProvider>, ['/drinks']);
+
+    const { history } = renderWithRouter(<RecipesProvider><Drinks /></RecipesProvider>, ['/drinks']);    
     expect(history.location.pathname).toBe('/drinks');
 
     await  waitFor(() => {
