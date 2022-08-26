@@ -44,6 +44,7 @@ export const favoriteRecipes = [
   },
 ];
 
+<<<<<<< HEAD
 export const inProgressFoodRecipes = {
   meals: {
     52771: [],
@@ -56,4 +57,6 @@ export const inProgressDrinkRecipes = {
   },
 };
 
+=======
+>>>>>>> 18abffda40519ff382fdd65cef356cef6d2b4b04
 export default doneRecipes;
