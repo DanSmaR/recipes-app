@@ -23,6 +23,7 @@ export const setDetails = (pathname, dataRecipe, idRecipe) => {
       nationality: dataRecipe[0].strArea,
       type: 'food',
       id: idRecipe,
+      tags: dataRecipe[0].strTags ? dataRecipe[0].strTags.split(',') : [],
     }]
   } else if (pathname.includes('drinks') && dataRecipe.length !== 0) {
     return [{
@@ -39,6 +40,7 @@ export const setDetails = (pathname, dataRecipe, idRecipe) => {
       nationality: '',
       type: 'drink',
       id: idRecipe,
+      tags: dataRecipe[0].strTags ? dataRecipe[0].strTags.split(',') : [],
     }]
   }
 }

@@ -93,12 +93,16 @@ export default function RecipeDetails(props) {
     }
     urlFetch(idRecipe);
   }, []);
-  const favoritar = (favorito) => {
+  const favoritar = (recipe) => {
+    const favRecipe = Object.keys(recipe).reduce((newFav, key) => {
+      if (key === 'tags') return { ...newFav };
+      return { ...newFav, [key]: recipe[key] };
+    }, {});
     const listaDeFavoritos = JSON.parse(localStorage.getItem('favoriteRecipes'));
     if (favoriteOk === whiteHeartIcon) {
       localStorage
         .setItem('favoriteRecipes',
-          JSON.stringify([...listaDeFavoritos, favorito]));
+          JSON.stringify([...listaDeFavoritos, favRecipe]));
       setFavoriteOk(blackHeartIcon);
     } else {
       const newFavorites = JSON.parse(localStorage.getItem('favoriteRecipes'))
@@ -185,13 +189,6 @@ export default function RecipeDetails(props) {
           className="progress-btn"
           data-testid="start-recipe-btn"
           onClick={ () => {
-            const emProgresso = JSON.parse(localStorage.getItem('inProgressRecipes'));
-            console.log(emProgresso, dataRecipe, allIngredients, idRecipe, pathname);
-            localStorage
-              .setItem('info', JSON.stringify([dataRecipe[0], allIngredients, idRecipe]));
-            localStorage
-              .setItem('inProgressRecipes', JSON
-                .stringify([...emProgresso, idRecipe, favorito]));
             history.push(`${pathname}/in-progress`);
           } }
         >

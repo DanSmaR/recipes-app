@@ -1,14 +1,4 @@
-import React from 'react';
-
-function RecipeInProgress() {
-  return (
-    <div>RecipeInProgress</div>
-  );
-}
-
-export default RecipeInProgress;
-
-/* import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Loading from '../components/Loading';
@@ -32,6 +22,14 @@ export default function RecipeInProgress(props) {
     localStorage.setItem('favoriteRecipes', JSON.stringify([]));
   }
 
+  if (localStorage.getItem('doneRecipes') === null) {
+    localStorage.setItem('doneRecipes', JSON.stringify([]));
+  }
+  const inProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
+  if (inProgress === null) {
+    localStorage.setItem('inProgressRecipes', JSON.stringify([]));
+  }
+
   const urlFetch = async (id) => {
     let path = '';
     let url = '';
@@ -51,10 +49,12 @@ export default function RecipeInProgress(props) {
     setAllIngredients(ingredientes);
     const allFalse = ingredientes.reduce((acc, e) => ({ ...acc, [e]: false }), {});
     setChecked(allFalse);
-    const inProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    if (inProgress === null || !inProgress.some((e) => e.id === idRecipe)) {
+
+    const inProg = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    console.log(inProg);
+    if (inProg !== null && !inProg.some((e) => e.id === idRecipe)) {
       localStorage.setItem('inProgressRecipes', JSON
-        .stringify([{ id: idRecipe, checked: allFalse }]));
+        .stringify([...inProg, { id: idRecipe, checked: allFalse }]));
       setChecked(allFalse);
     } else {
       const receita = inProgress.find((e) => e.id === idRecipe);
@@ -87,12 +87,16 @@ export default function RecipeInProgress(props) {
     urlFetch(idRecipe);
   }, []);
 
-  const favoritar = (favorito) => {
+  const favoritar = (recipe) => {
+    const favRecipe = Object.keys(recipe).reduce((newFav, key) => {
+      if (key === 'tags') return { ...newFav };
+      return { ...newFav, [key]: recipe[key] };
+    }, {});
     const listaDeFavoritos = JSON.parse(localStorage.getItem('favoriteRecipes'));
     if (favoriteOk === whiteHeartIcon) {
       localStorage
         .setItem('favoriteRecipes',
-          JSON.stringify([...listaDeFavoritos, favorito]));
+          JSON.stringify([...listaDeFavoritos, favRecipe]));
       setFavoriteOk(blackHeartIcon);
     } else {
       const newFavorites = JSON.parse(localStorage.getItem('favoriteRecipes'))
@@ -104,13 +108,29 @@ export default function RecipeInProgress(props) {
     }
   };
 
+  const addFinishedRecipe = (recipe) => {
+    const date = new Date();
+    const recipeWithDoneData = {
+      ...recipe, doneDate: date };
+    const finisheds = JSON.parse(localStorage.getItem('doneRecipes'));
+    localStorage.setItem('doneRecipes', JSON
+      .stringify([...finisheds, recipeWithDoneData]));
+    history.push('/done-recipes');
+  };
+
   const handleCheck = ({ target: { name } }) => {
     setChecked({ ...checked, [name]: !checked[name] });
-    const inProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    const receita = inProgress.filter((e) => e.id !== idRecipe);
+    const progress = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    const receita = progress.filter((e) => e.id !== idRecipe);
     receita.push({ id: idRecipe, checked: { ...checked, [name]: !checked[name] } });
     localStorage.setItem('inProgressRecipes', JSON
       .stringify(receita));
+  };
+
+  const btnSubmit = () => {
+    const allTrue = Object.values(checked)
+      .every((e) => e === true);
+    return !allTrue;
   };
 
   const renderDetails = (obj, favorito) => (
@@ -146,37 +166,30 @@ export default function RecipeInProgress(props) {
       <h2 data-testid="recipe-category">{obj.category}</h2>
 
       <div>
-        { allIngredients.map((e, i) => {
-          const checkbox = checked[e];
-          return (
-            <p key={ e }>
-              <label htmlFor={ `ingredient-${i}` } data-testid={ `${i}-ingredient-step` }>
-                <input
-                  checked={ checkbox }
-                  name={ e }
-                  value={ e }
-                  id={ `ingredient-${i}` }
-                  type="checkbox"
-                  onChange={ handleCheck }
-                />
-                { e }
-              </label>
-            </p>
-          );
-        }) }
+        { allIngredients.map((e, i) => (
+          <p key={ e }>
+            <label htmlFor={ `ingredient-${i}` } data-testid={ `${i}-ingredient-step` }>
+              <input
+                checked={ checked[e] }
+                className="checkbox"
+                name={ e }
+                value={ e }
+                id={ `ingredient-${i}` }
+                type="checkbox"
+                onChange={ handleCheck }
+              />
+              { e }
+            </label>
+          </p>
+        )) }
       </div>
 
       <p data-testid="instructions">{obj.instrucao}</p>
-
       <button
         type="button"
-        onClick={ () => {
-          const dones = JSON.parse(localStorage.getItem('doneRecipes'));
-          localStorage.setItem('doneRecipes', JSON
-            .stringify([...dones, idRecipe]));
-          history.push('/done-recipes');
-        } }
+        onClick={ () => addFinishedRecipe(favorito) }
         data-testid="finish-recipe-btn"
+        disabled={ btnSubmit() }
       >
         Finish Recipes
 
@@ -199,4 +212,3 @@ RecipeInProgress.propTypes = {
     }),
   }).isRequired,
 };
- */
