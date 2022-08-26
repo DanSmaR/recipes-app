@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import '../utils/css/Login.css';
 
 export default function Login() {
   const history = useHistory();
@@ -27,11 +28,11 @@ export default function Login() {
   };
 
   return (
-    <div>
-      <form>
-        <h1>Login</h1>
+    <div className="login-box">
+      <form className="login-page">
+        <h1 className="title">Login</h1>
         <p>
-          <label htmlFor="Email">
+          <label htmlFor="Email" className="title">
             Email
             <input
               type="email"
@@ -45,7 +46,7 @@ export default function Login() {
           </label>
         </p>
         <p>
-          <label htmlFor="password-input">
+          <label htmlFor="password-input" className="title">
             Senha
             <input
               type="password"
@@ -58,7 +59,7 @@ export default function Login() {
             />
           </label>
         </p>
-        <p>
+        <p className="teste">
           <button
             type="button"
             onClick={ handleSubmit }
