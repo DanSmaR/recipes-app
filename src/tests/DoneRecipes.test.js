@@ -25,8 +25,10 @@ describe('Testa a página Done Recipes', () => {
   })
 
   it('Renderiza todos os elementos corretamente', () => {
+
     localStorage.getItem.mockReturnValue(doneRecipesStringified);
     renderWithRouter(<RecipesProvider><DoneRecipes /></RecipesProvider>);
+
     const allFilterBtn = screen.getByRole('button', {  name: /all/i});
     const foodFilterBtn = screen.getByRole('button', {  name: /foods/i});
     const drinkFilterBtn = screen.getByRole('button', {  name: /drinks/i});
@@ -55,6 +57,7 @@ describe('Testa a página Done Recipes', () => {
         writeText: jest.fn().mockImplementation((linkCopied) => Promise.resolve(linkCopied)),
       },
     });
+
     localStorage.getItem.mockReturnValue(doneRecipesStringified);
     renderWithRouter(<RecipesProvider><DoneRecipes /></RecipesProvider>);
     const shareBtn = screen.getAllByRole('button', { name: /share icon/i });
@@ -66,7 +69,7 @@ describe('Testa a página Done Recipes', () => {
   it('Não deve haver receitas na tela caso não há uma chave doneRecipes no localStorage', () => {
     localStorage.getItem.mockReturnValue(null);
     renderWithRouter(<RecipesProvider><DoneRecipes /></RecipesProvider>);
-    screen.logTestingPlaygroundURL();
+
     expect(screen.queryByRole('img', { name: /aquamarine/i })).not.toBeInTheDocument();
   });
 })

@@ -44,4 +44,16 @@ export const favoriteRecipes = [
   },
 ];
 
+export const inProgressFoodRecipes = {
+  meals: {
+    52771: [],
+  },
+};
+
+export const inProgressDrinkRecipes = {
+  cocktails: {
+    178319: [],
+  },
+};
+
 export default doneRecipes;

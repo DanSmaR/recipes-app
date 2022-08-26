@@ -6,6 +6,8 @@ import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 const copy = require('clipboard-copy');
 
+const END_SLICE = 10;
+
 function RecipeCard(props) {
   const { setFavorites } = useContext(RecipesContext);
   const { recipe, index } = props;
@@ -80,10 +82,10 @@ function RecipeCard(props) {
               Done in:
               {' '}
               <time
-                dateTime={ doneDate.split('/').reverse().join('-') }
+                dateTime={ doneDate.slice(0, END_SLICE) }
                 data-testid={ `${index}-horizontal-done-date` }
               >
-                { doneDate }
+                { doneDate.slice(0, END_SLICE).split('-').reverse().join('/') }
               </time>
             </p>)
             : (
