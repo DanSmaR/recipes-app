@@ -12,7 +12,6 @@ export default function RecipesProvider({ children }) {
     searchFood,
     setState,
     setSearchFood,
-    searchFood,
     favorites,
     setFavorites,
   };
