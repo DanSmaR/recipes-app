@@ -93,12 +93,16 @@ export default function RecipeDetails(props) {
     }
     urlFetch(idRecipe);
   }, []);
-  const favoritar = (favorito) => {
+  const favoritar = (recipe) => {
+    const favRecipe = Object.keys(recipe).reduce((newFav, key) => {
+      if (key === 'tags') return { ...newFav };
+      return { ...newFav, [key]: recipe[key] };
+    }, {});
     const listaDeFavoritos = JSON.parse(localStorage.getItem('favoriteRecipes'));
     if (favoriteOk === whiteHeartIcon) {
       localStorage
         .setItem('favoriteRecipes',
-          JSON.stringify([...listaDeFavoritos, favorito]));
+          JSON.stringify([...listaDeFavoritos, favRecipe]));
       setFavoriteOk(blackHeartIcon);
     } else {
       const newFavorites = JSON.parse(localStorage.getItem('favoriteRecipes'))

@@ -85,12 +85,16 @@ export default function RecipeInProgress(props) {
     urlFetch(idRecipe);
   }, []);
 
-  const favoritar = (favorito) => {
+  const favoritar = (recipe) => {
+    const favRecipe = Object.keys(recipe).reduce((newFav, key) => {
+      if (key === 'tags') return { ...newFav };
+      return { ...newFav, [key]: recipe[key] };
+    }, {});
     const listaDeFavoritos = JSON.parse(localStorage.getItem('favoriteRecipes'));
     if (favoriteOk === whiteHeartIcon) {
       localStorage
         .setItem('favoriteRecipes',
-          JSON.stringify([...listaDeFavoritos, favorito]));
+          JSON.stringify([...listaDeFavoritos, favRecipe]));
       setFavoriteOk(blackHeartIcon);
     } else {
       const newFavorites = JSON.parse(localStorage.getItem('favoriteRecipes'))
@@ -100,6 +104,16 @@ export default function RecipeInProgress(props) {
           JSON.stringify(newFavorites));
       setFavoriteOk(whiteHeartIcon);
     }
+  };
+
+  const addFinishedRecipe = (recipe) => {
+    const date = new Date();
+    const recipeWithDoneData = {
+      ...recipe, doneDate: date };
+    const finisheds = JSON.parse(localStorage.getItem('doneRecipes'));
+    localStorage.setItem('doneRecipes', JSON
+      .stringify([...finisheds, recipeWithDoneData]));
+    history.push('/done-recipes');
   };
 
   const handleCheck = ({ target: { name } }) => {
@@ -171,12 +185,7 @@ export default function RecipeInProgress(props) {
       <p data-testid="instructions">{obj.instrucao}</p>
       <button
         type="button"
-        onClick={ () => {
-          const dones = JSON.parse(localStorage.getItem('doneRecipes'));
-          localStorage.setItem('doneRecipes', JSON
-            .stringify([...dones, idRecipe]));
-          history.push('/done-recipes');
-        } }
+        onClick={ () => addFinishedRecipe(favorito) }
         data-testid="finish-recipe-btn"
         disabled={ btnSubmit() }
       >
