@@ -15,7 +15,7 @@ export default function Header({ title }) {
   && pathname !== '/favorite-recipes';
 
   return (
-    <div>
+    <div className="header">
       <header
         style={ { display: 'flex',
           justifyContent: 'space-between',
@@ -23,12 +23,14 @@ export default function Header({ title }) {
       >
         <Link
           to="/profile"
+          className="header-icon"
         >
           <img src={ profileIcon } alt="profileIcon" data-testid="profile-top-btn" />
         </Link>
         <h1 data-testid="page-title">{title}</h1>
         {headerValidation && (
           <button
+            className="header-icon"
             style={ { border: 'none', background: 'none' } }
             type="button"
             onClick={ () => setToggleSearch(!toggleSearch) }

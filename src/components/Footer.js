@@ -15,7 +15,6 @@ function Footer() {
           alt="drink_icon"
         />
       </Link>
-      Footer
       <Link
         to="/foods"
       >

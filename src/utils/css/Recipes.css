@@ -1,0 +1,29 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.recipe-container {
+  display: flex;
+  flex-flow: wrap;
+  list-style: none;
+  justify-content: space-around;
+  margin-bottom: 4em;
+}
+
+.recipe-container li {
+  background: whitesmoke;
+  text-align: center;
+  display: flex;
+  border-radius: 5px;
+  padding: 8px 16px;
+  margin: 5px 0;
+  width: 40%;
+}
+
+.recipe-container p {
+  margin-bottom: 0;
+  margin-top: 0.4em;
+  line-height: 1.5;
+}

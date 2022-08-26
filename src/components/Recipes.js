@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Card from './Card';
 import { URLMealsArr, URLDrinksArr } from '../utils/constants';
 import RecipesContext from '../context/RecipesContext';
+import '../utils/css/Recipes.css';
 
 function Recipes() {
   const { searchFood, setSearchFood } = useContext(RecipesContext);
@@ -70,31 +71,38 @@ function Recipes() {
 
   return (
     <div>
-      {
-        !isLoading && (
-          <button
-            data-testid="All-category-filter"
-            type="button"
-            onClick={ () => handleCategoryFetch('all') }
-          >
-            All
+      <ul className="filter-container">
+        {
+          !isLoading && (
+            <li>
+              <button
+                className="filterBtn"
+                data-testid="All-category-filter"
+                type="button"
+                onClick={ () => handleCategoryFetch('all') }
+              >
+                All
 
-          </button>)
-      }
-      {
-        !isLoading && categories.map((category, index) => (
-          <button
-            key={ index }
-            type="button"
-            onClick={ () => handleCategoryFetch(category.strCategory) }
-            data-testid={ `${category.strCategory}-category-filter` }
-          >
-            { category.strCategory }
+              </button>
+            </li>)
+        }
+        {
+          !isLoading && categories.map((category, index) => (
+            <li key={ index }>
+              <button
+                className="filterBtn"
+                type="button"
+                onClick={ () => handleCategoryFetch(category.strCategory) }
+                data-testid={ `${category.strCategory}-category-filter` }
+              >
+                { category.strCategory.replace('/', ' ') }
 
-          </button>
-        ))
-      }
-      <ul>
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+      <ul className="recipe-container">
         {
           !isLoading && (Array.isArray(searchFood) ? searchFood : searchFood[path])
             .filter((_, index) => index < MAX_LENGTH_RECIPES)

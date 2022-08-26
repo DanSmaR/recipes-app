@@ -6,6 +6,7 @@
 
 body {
   background-color: #addced;
+  padding: 0;
 }
 
 .author-info {
@@ -26,7 +27,7 @@ body {
 
 .meals {
   align-items: center;
-  background: #0fa36b;
+  background: #addced;
   color: #464646;
   display: flex;
   flex-direction: column;
@@ -52,7 +53,7 @@ body {
 
 .meals > .logo {
   animation: shake 1.5s infinite ease;
-  color: aliceblue;
+  color: rgb(245, 245, 245);
   font-family: Montserrat , sans-serif;
   font-size: 3em;
   font-weight: 900;

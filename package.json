@@ -69,5 +69,9 @@
       "src/hooks",
       "src/tests"
     ]
+  },
+  "stylelint.enable": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.stylelint": true
   }
 }

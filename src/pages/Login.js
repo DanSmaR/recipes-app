@@ -29,7 +29,7 @@ export default function Login() {
 
   return (
     <div className="login-box">
-      <form className="login-page">
+      <form className="login-page shadow-pop-tr">
         <h1 className="title">Login</h1>
         <p>
           <label htmlFor="Email" className="title">

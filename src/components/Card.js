@@ -9,9 +9,18 @@ export default function Card({ recipes, index }) {
   function renderCard({ recipeId, recipeIndex, img, name, path }) {
     return (
       <li>
-        <Link data-testid={ `${recipeIndex}-recipe-card` } to={ `/${path}/${recipeId}` }>
+        <Link
+          style={ {
+            width: '100%',
+            textDecoration: 'none',
+            fontSize: '20px',
+            fontWeight: 'bold',
+            color: 'black' } }
+          data-testid={ `${recipeIndex}-recipe-card` }
+          to={ `/${path}/${recipeId}` }
+        >
           <img
-            style={ { width: '80%' } }
+            style={ { width: '100%', borderRadius: '5px' } }
             data-testid={ `${recipeIndex}-card-img` }
             src={ img }
             alt={ name }
