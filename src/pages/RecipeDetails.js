@@ -6,6 +6,7 @@ import blackHeartIcon from '../images/blackHeartIcon.svg';
 import CardRecomend from '../components/CardRecomend';
 import Loading from '../components/Loading';
 import { setDetails } from '../tests/helpers/setDetails';
+import '../utils/css/Recipesdetails.css';
 
 const NUMBER_RECOMENDATION = 5;
 const copy = require('clipboard-copy');
@@ -115,7 +116,17 @@ export default function RecipeDetails(props) {
   };
   const renderDetails = (obj, favorito) => (
     <div>
+      <div>
+        <img
+          className="meal-img"
+          src={ obj.image }
+          data-testid="recipe-photo"
+          alt={ obj.name }
+        />
+      </div>
+      <br />
       <button
+        className="share-btn"
         data-testid="share-btn"
         type="button"
         onClick={ () => toggleMessageLinkCopied() }
@@ -124,6 +135,7 @@ export default function RecipeDetails(props) {
       </button>
       {displayMessage && <span>Link copied!</span>}
       <button
+        className="favorite-btn"
         data-testid="favorite-btn"
         type="button"
         onClick={ () => favoritar(favorito) }
@@ -134,38 +146,38 @@ export default function RecipeDetails(props) {
           alt="favoritado"
         />
       </button>
-      <img
-        className="meal-img"
-        src={ obj.image }
-        data-testid="recipe-photo"
-        alt={ obj.name }
-      />
-      <h1 data-testid="recipe-title">{obj.name}</h1>
-      <h2 data-testid="recipe-category">{obj.category}</h2>
-      <div>
+      <h1 className="recipe-name" data-testid="recipe-title">{obj.name}</h1>
+      <h2 data-testid="recipe-category" className="recipe-name">{obj.category}</h2>
+      <h3 className="instructions-recipe">Ingredients:</h3>
+      <ul className="ingredients-list">
         { allIngredients.map((e, i) => (
-          <p
+          <li
             key={ i }
             data-testid={ `${i}-ingredient-name-and-measure` }
           >
-            -
             {' '}
             {e}
             {' '}
-            -
             {' '}
             { measure[i] }
-          </p>
+          </li>
         )) }
-      </div>
-      <p data-testid="instructions">{obj.instrucao}</p>
-      { obj.video !== null && <iframe
-        data-testid="video"
-        title={ `Video Fazendo ${obj.name}` }
-        width="420"
-        height="315"
-        src={ `//www.youtube.com/embed/${obj.video}` }
-      /> }
+      </ul>
+      <h3 className="instructions-recipe">Instructions:</h3>
+      <p className="instructions-recipe" data-testid="instructions">
+        {obj.instrucao}
+      </p>
+      { obj.video !== null && (
+        <div className="video-container">
+          <iframe
+            data-testid="video"
+            title={ `Video Fazendo ${obj.name}` }
+            width="420"
+            height="315"
+            src={ `//www.youtube.com/embed/${obj.video}` }
+          />
+        </div>
+      ) }
       <div className="slider">
         <div className="slides">
           { recomendation.map((e, i) => (

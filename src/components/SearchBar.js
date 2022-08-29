@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import RecipesContext from '../context/RecipesContext';
+import '../utils/css/SearchBar.css';
 
 export default function SearchBar() {
   const history = useHistory();
@@ -73,10 +74,11 @@ export default function SearchBar() {
   };
 
   return (
-    <form onSubmit={ btnClick }>
+    <form className="search-form" onSubmit={ btnClick }>
       <p>
         <label htmlFor="searchBar">
           <input
+            className="search-form__input"
             id="searchBar"
             type="text"
             placeholder="Pesquise uma comida ou bebida"
@@ -86,7 +88,7 @@ export default function SearchBar() {
           />
         </label>
       </p>
-      <ul>
+      <ul className="search-form__options">
         <li>
           <label htmlFor="ingredientRadio">
             <input
@@ -97,6 +99,7 @@ export default function SearchBar() {
               value="Ingredient"
               onChange={ handleInput }
             />
+            {' '}
             Ingredient
           </label>
         </li>
@@ -110,6 +113,7 @@ export default function SearchBar() {
               value="Name"
               onChange={ handleInput }
             />
+            {' '}
             Name
           </label>
         </li>
@@ -123,6 +127,7 @@ export default function SearchBar() {
               value="First letter"
               onChange={ handleInput }
             />
+            {' '}
             First letter
           </label>
         </li>
@@ -130,11 +135,11 @@ export default function SearchBar() {
 
       <p>
         <button
+          className="search-form__button"
           type="submit"
           data-testid="exec-search-btn"
         >
           Submit
-
         </button>
       </p>
     </form>

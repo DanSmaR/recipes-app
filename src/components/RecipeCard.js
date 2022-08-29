@@ -91,12 +91,14 @@ function RecipeCard(props) {
             : (
               <button
                 type="button"
+                className="someButtons"
                 onClick={ () => handleUnfavorite(id) }
               >
                 <img
                   data-testid={ `${index}-horizontal-favorite-btn` }
                   src={ blackHeartIcon }
                   alt="blackHeartIcon"
+                  className="someButtons"
                 />
               </button>
             )}
@@ -112,12 +114,14 @@ function RecipeCard(props) {
           </div>
           <button
             type="button"
+            className="someButtons"
             onClick={ () => toggleMessageLinkCopied(id, type) }
           >
             <img
               data-testid={ `${index}-horizontal-share-btn` }
               src={ shareIcon }
               alt="share icon"
+              className="someButtons"
             />
           </button>
           {displayMessage && <span>Link copied!</span>}

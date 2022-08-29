@@ -65,12 +65,11 @@ body {
 }
 
 .mealRecomend-img {
-  height: 150px;
-  width: 150px;
+  width: 100%;
 }
 
 .mealRecomend-name {
-  font-size: 30px;
+  font-size: 20px;
 }
 
 @keyframes shake {
@@ -109,7 +108,8 @@ body {
 
 .progress-btn {
   bottom: 0;
-  display: flex;
+  width: 100%;
+  padding: 8px 16px;
   position: fixed;
 }
 
@@ -122,10 +122,14 @@ body {
   overflow: hidden;
   text-align: center;
   width: 250px;
+  margin-bottom: 30px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .slides {
   display: flex;
+  margin-bottom: 30px;
   -webkit-overflow-scrolling: touch;
   overflow-x: auto;
   scroll-behavior: smooth;
@@ -156,7 +160,7 @@ body {
   display: flex;
   flex-shrink: 0;
   font-size: 50px;
-  height: 300px;
+  padding: 0.2em;
   justify-content: center;
   margin-right: 50px;
   position: relative;
@@ -182,3 +186,10 @@ body {
 .recomend-ul {
   list-style: none;
 }
+
+.someButtons {
+  background: #addced;
+  border-color: #addced;
+  border-width: 0;
+}
+

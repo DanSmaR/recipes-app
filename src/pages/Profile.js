@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
+import '../utils/css/Profile.css';
 
 export default function Profile() {
   function handleLogout() {
@@ -10,38 +11,43 @@ export default function Profile() {
   return (
     <div>
       <Header title="Profile" />
-      <p data-testid="profile-email">{usrEmail.email}</p>
-      <Link to="/done-recipes">
-        <button
-          data-testid="profile-done-btn"
-          type="button"
-        >
-          Done Recipes
-
-        </button>
-      </Link>
-      <Link to="/favorite-recipes">
-        <button
-          data-testid="profile-favorite-btn"
-          type="button"
-        >
-          Favorite Recipes
-
-        </button>
-
-      </Link>
-
-      <Link to="/" replace>
-        <button
-          data-testid="profile-logout-btn"
-          type="button"
-          onClick={ handleLogout }
-        >
-          Logout
-
-        </button>
-
-      </Link>
+      <p className="text" data-testid="profile-email">{usrEmail.email}</p>
+      <ul className="profile-nav">
+        <li>
+          <Link className="nav-link" to="/done-recipes">
+            <button
+              className="nav-btn"
+              data-testid="profile-done-btn"
+              type="button"
+            >
+              Done Recipes
+            </button>
+          </Link>
+        </li>
+        <li>
+          <Link className="nav-link" to="/favorite-recipes">
+            <button
+              className="nav-btn"
+              data-testid="profile-favorite-btn"
+              type="button"
+            >
+              Favorite Recipes
+            </button>
+          </Link>
+        </li>
+        <li>
+          <Link className="nav-link" to="/" replace>
+            <button
+              className="nav-btn"
+              data-testid="profile-logout-btn"
+              type="button"
+              onClick={ handleLogout }
+            >
+              Logout
+            </button>
+          </Link>
+        </li>
+      </ul>
     </div>
   );
 }

@@ -61,5 +61,6 @@ export default function FavoriteRecipes() {
             index={ index }
           />))
       }
-    </div>);
+    </div>
+  );
 }

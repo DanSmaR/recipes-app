@@ -74,6 +74,10 @@ p {
   padding: 5px;
 }
 
+.filterBtn:hover {
+  background-color: ##d3d3d3;
+}
+
 .card-recipe {
   display: flex;
   margin: 8px 16px;

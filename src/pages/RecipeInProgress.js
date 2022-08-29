@@ -5,6 +5,7 @@ import Loading from '../components/Loading';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import { setDetails } from '../tests/helpers/setDetails';
+import '../utils/css/InprogressRecipes.css';
 
 const copy = require('clipboard-copy');
 
@@ -135,8 +136,17 @@ export default function RecipeInProgress(props) {
 
   const renderDetails = (obj, favorito) => (
     <div>
+      <h1 className="recipe-name" data-testid="recipe-title">{obj.name}</h1>
+      <h2 className="recipe-name" data-testid="recipe-category">{obj.category}</h2>
+      <img
+        className="meal-img"
+        src={ obj.image }
+        data-testid="recipe-photo"
+        alt={ obj.name }
+      />
       <button
         data-testid="share-btn"
+        className="share-btn"
         type="button"
         onClick={ () => toggleMessageLinkCopied() }
       >
@@ -146,6 +156,7 @@ export default function RecipeInProgress(props) {
 
       <button
         data-testid="favorite-btn"
+        className="favorite-btn"
         type="button"
         onClick={ () => favoritar(favorito) }
         src={ favoriteOk }
@@ -155,17 +166,8 @@ export default function RecipeInProgress(props) {
           alt="favoritado"
         />
       </button>
-      <img
-        className="meal-img"
-        src={ obj.image }
-        data-testid="recipe-photo"
-        alt={ obj.name }
-      />
 
-      <h1 data-testid="recipe-title">{obj.name}</h1>
-      <h2 data-testid="recipe-category">{obj.category}</h2>
-
-      <div>
+      <div className="ingredients-list">
         { allIngredients.map((e, i) => (
           <p key={ e }>
             <label htmlFor={ `ingredient-${i}` } data-testid={ `${i}-ingredient-step` }>
@@ -183,10 +185,11 @@ export default function RecipeInProgress(props) {
           </p>
         )) }
       </div>
-
-      <p data-testid="instructions">{obj.instrucao}</p>
+      <h3 className="instructions-recipe">Instructions:</h3>
+      <p data-testid="instructions" className="instructions-recipe">{obj.instrucao}</p>
       <button
         type="button"
+        className="finish-btn"
         onClick={ () => addFinishedRecipe(favorito) }
         data-testid="finish-recipe-btn"
         disabled={ btnSubmit() }
