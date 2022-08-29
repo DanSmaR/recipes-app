@@ -20,6 +20,7 @@
   padding: 8px 16px;
   margin: 5px 0;
   width: 40%;
+  align-items: center;
 }
 
 .recipe-container p {
