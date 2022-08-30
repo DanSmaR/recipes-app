@@ -167,9 +167,9 @@ export default function RecipeInProgress(props) {
         />
       </button>
 
-      <div className="ingredients-list">
+      <ul className="ingredients-list">
         { allIngredients.map((e, i) => (
-          <p key={ e }>
+          <li key={ e }>
             <label htmlFor={ `ingredient-${i}` } data-testid={ `${i}-ingredient-step` }>
               <input
                 checked={ checked[e] }
@@ -180,12 +180,13 @@ export default function RecipeInProgress(props) {
                 type="checkbox"
                 onChange={ handleCheck }
               />
+              {' '}
               { e }
             </label>
-          </p>
+          </li>
         )) }
-      </div>
-      <h3 className="instructions-recipe">Instructions:</h3>
+      </ul>
+      <h3 className="instructions-title">Instructions:</h3>
       <p data-testid="instructions" className="instructions-recipe">{obj.instrucao}</p>
       <button
         type="button"
@@ -194,7 +195,7 @@ export default function RecipeInProgress(props) {
         data-testid="finish-recipe-btn"
         disabled={ btnSubmit() }
       >
-        Finish Recipes
+        Finish Recipe
 
       </button>
     </div>

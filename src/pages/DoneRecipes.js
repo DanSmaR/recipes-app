@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import Header from '../components/Header';
 import RecipeCard from '../components/RecipeCard';
 
@@ -46,12 +46,16 @@ export default function DoneRecipes() {
         .filter((recipe) => activeRecipeType === 'all'
           || recipe.type === activeRecipeType)
         .map((recipe, index) => (
-          <RecipeCard
-            key={ index }
-            type={ recipe.type }
-            recipe={ recipe }
-            index={ index }
-          />))
+          <Fragment key={ index }>
+            <RecipeCard
+              type={ recipe.type }
+              recipe={ recipe }
+              index={ index }
+            />
+            <hr />
+          </Fragment>
+        ))
       }
-    </div>);
+    </div>
+  );
 }

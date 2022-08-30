@@ -31,7 +31,8 @@ export default function Card({ recipes, index }) {
             { name }
           </p>
         </Link>
-      </li>);
+      </li>
+    );
   }
   if (pathname === '/foods') {
     const { idMeal, strMealThumb, strMeal } = recipes;

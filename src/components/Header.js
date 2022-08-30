@@ -19,7 +19,7 @@ export default function Header({ title }) {
       <header
         style={ { display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'flex-start' } }
+          alignItems: 'center' } }
       >
         <Link
           to="/profile"
@@ -27,7 +27,7 @@ export default function Header({ title }) {
         >
           <img src={ profileIcon } alt="profileIcon" data-testid="profile-top-btn" />
         </Link>
-        <h1 data-testid="page-title">{title}</h1>
+        <h1 style={ { textAlign: 'right' } } data-testid="page-title">{title}</h1>
         {headerValidation && (
           <button
             className="header-icon"

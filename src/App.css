@@ -107,6 +107,7 @@ body {
 } */
 
 .progress-btn {
+  font-size: 1.5em;
   bottom: 0;
   width: 100%;
   padding: 8px 16px;
@@ -191,5 +192,6 @@ body {
   background: #addced;
   border-color: #addced;
   border-width: 0;
+  margin-left: 0.5em;
 }
 

@@ -42,9 +42,14 @@
   border: 2px;
   border-color: white;
   border-radius: 8px;
-  font-size: 20px;
-  height: 30px;
+  font-size: 0.6em;
+  padding: 0.4em 1em;
   text-align: center;
+  outline: none;
+}
+
+.login-input:focus {
+  border: 4px solid rgb(245, 152, 30);
 }
 
 
@@ -59,8 +64,8 @@
   border-color: #031375;
   border-radius: 5px;
   color: black;
-  font-size: 20px;
-  padding: 5px;
+  font-size: 1em;
+  padding: 0.2em 0.8em;
 }
 
 .btn-login:disabled {
@@ -73,5 +78,5 @@
 }
 
 .login-input::placeholder {
-  font-size: small;
+  font-size: 1em;
 }

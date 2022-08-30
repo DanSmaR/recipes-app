@@ -9,21 +9,24 @@
 }
 
 .search-form__input {
+  margin-top: 1em;
   width: 100%;
   border: 2px;
   border-color: white;
   border-radius: 8px;
-  font-size: 20px;
+  font-size: 1.8em;
   height: 30px;
   text-align: center;
   outline: none;
+  padding: 0.8em;
 }
 
 .search-form__input::placeholder {
-  font-size: small;
+  font-size: 0.7em;
 }
 
 .search-form__options {
+  font-size: 1.3em;
   display: flex;
   list-style: none;
   flex-wrap: wrap;
@@ -36,10 +39,11 @@
   border-color: #031375;
   border-radius: 5px;
   color: black;
-  font-size: 1em;
-  padding: 0.5em 2em;
+  font-size: 1.4em;
+  padding: 0.2em 1.5em;
 }
 
-.search-form__button:hover {
+.search-form__button:hover,
+.search-form__button:focus {
   border: 1px solid black;
 }

@@ -7,6 +7,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
   padding: 0px 8px;
+  font-size: 1.2rem;
 }
 
 code {
@@ -70,12 +71,14 @@ p {
   border: 5px;
   border-radius: 5px;
   color: black;
-  font-size: 16px;
+  font-size: 1.3em;
   padding: 5px;
+  line-height: 1.2;
 }
 
-.filterBtn:hover {
-  background-color: ##d3d3d3;
+.filterBtn:hover,
+.filterBtn:focus {
+  background-color: #d3d3d3;
 }
 
 .card-recipe {
@@ -89,6 +92,11 @@ p {
   width: fit-content;
 }
 .card-recipe a img {
+  border-radius: 20px;
   height: 20%;
   margin-right: 20px;
+}
+
+.card-recipe span {
+  font-size: 1.3em;
 }

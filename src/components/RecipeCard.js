@@ -102,16 +102,14 @@ function RecipeCard(props) {
                 />
               </button>
             )}
-          <div>
-            {
-              tags && tags.map((tag) => (
-                <span key={ tag } data-testid={ `${index}-${tag}-horizontal-tag` }>
-                  { tag }
-                  {' '}
-                </span>
-              ))
-            }
-          </div>
+          {
+            tags && tags.map((tag) => (
+              <span key={ tag } data-testid={ `${index}-${tag}-horizontal-tag` }>
+                { tag }
+                {' '}
+              </span>
+            ))
+          }
           <button
             type="button"
             className="someButtons"

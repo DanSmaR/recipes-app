@@ -81,7 +81,8 @@ export default function SearchBar() {
             className="search-form__input"
             id="searchBar"
             type="text"
-            placeholder="Pesquise uma comida ou bebida"
+            placeholder={ pathname === '/drinks'
+              ? 'Pesquise uma bebida' : 'Pesquise uma comida' }
             data-testid="search-input"
             value={ inputText }
             onChange={ handleInput }

@@ -148,7 +148,7 @@ export default function RecipeDetails(props) {
       </button>
       <h1 className="recipe-name" data-testid="recipe-title">{obj.name}</h1>
       <h2 data-testid="recipe-category" className="recipe-name">{obj.category}</h2>
-      <h3 className="instructions-recipe">Ingredients:</h3>
+      <h3 className="instructions-title">Ingredients:</h3>
       <ul className="ingredients-list">
         { allIngredients.map((e, i) => (
           <li
@@ -163,7 +163,7 @@ export default function RecipeDetails(props) {
           </li>
         )) }
       </ul>
-      <h3 className="instructions-recipe">Instructions:</h3>
+      <h3 className="instructions-title">Instructions:</h3>
       <p className="instructions-recipe" data-testid="instructions">
         {obj.instrucao}
       </p>
@@ -172,8 +172,8 @@ export default function RecipeDetails(props) {
           <iframe
             data-testid="video"
             title={ `Video Fazendo ${obj.name}` }
-            width="420"
-            height="315"
+            // width="420"
+            // height="315"
             src={ `//www.youtube.com/embed/${obj.video}` }
           />
         </div>

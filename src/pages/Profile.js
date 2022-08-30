@@ -11,7 +11,14 @@ export default function Profile() {
   return (
     <div>
       <Header title="Profile" />
-      <p className="text" data-testid="profile-email">{usrEmail.email}</p>
+      <p
+        style={ { fontSize: '1.3em' } }
+        className="text"
+        data-testid="profile-email"
+      >
+        {usrEmail.email}
+
+      </p>
       <ul className="profile-nav">
         <li>
           <Link className="nav-link" to="/done-recipes">
