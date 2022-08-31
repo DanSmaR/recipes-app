@@ -85,8 +85,12 @@ p {
   display: flex;
   margin: 8px 16px;
   align-items: center;
-
 }
+
+.card-recipe:first-of-type {
+  margin-top: -3em;
+}
+
 .card-recipe a {
   height: fit-content;
   width: fit-content;

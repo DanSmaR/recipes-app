@@ -167,7 +167,7 @@ export default function RecipeInProgress(props) {
         />
       </button>
 
-      <ul className="ingredients-list">
+      <ul className="ingredients-list--progress">
         { allIngredients.map((e, i) => (
           <li key={ e }>
             <label htmlFor={ `ingredient-${i}` } data-testid={ `${i}-ingredient-step` }>

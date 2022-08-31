@@ -11,17 +11,22 @@
   margin-left: 15px;
 }
 
-.ingredients-list {
-  display: flex;
-  flex-direction: column;
-  list-style: '- ';
-  padding: 2em;
-}
-
 .instructions-title {
   font-weight: 700;
   font-size: 1.5em;
   padding-left: 1em;
+}
+
+.ingredients-list--progress {
+  display: flex;
+  flex-direction: column;
+  padding: 0.2em 2em;
+  font-size: 1.3em;
+  list-style: none;
+}
+
+.ingredients-list--progress li:before {
+  content: '\200B';
 }
 
 .instructions-recipe {

@@ -19,6 +19,10 @@
   list-style: none;
 }
 
+.ingredients-list li:before {
+  content: '-';
+}
+
 .instructions-recipe {
   text-indent: 2em;
   padding: 0.4em 1.5em;
